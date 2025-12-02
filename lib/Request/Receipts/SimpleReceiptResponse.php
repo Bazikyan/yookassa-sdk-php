@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,19 +27,14 @@
 namespace YooKassa\Request\Receipts;
 
 /**
- * Класс описывающий чек, не привязанный ни к платежу ни к возврату
- *
- * @package YooKassa
+ * Класс описывающий чек, не привязанный ни к платежу ни к возврату.
  */
 class SimpleReceiptResponse extends AbstractReceiptResponse
 {
     /**
-     * Установка свойств, присущих конкретному объекту
-     *
-     * @param array $receiptData
-     *
-     * @return void
+     * Установка свойств, присущих конкретному объекту.
      */
-    public function setSpecificProperties($receiptData)
-    {}
+    public function setSpecificProperties(array $receiptData): void
+    {
+    }
 }

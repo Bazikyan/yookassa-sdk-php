@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,30 +28,22 @@ namespace YooKassa\Common\Exceptions;
 
 class InvalidPropertyValueException extends InvalidPropertyException
 {
-    /**
-     * @var mixed
-     */
-    private $invalidValue;
+    private mixed $invalidValue = null;
 
     /**
      * InvalidPropertyValueTypeException constructor.
-     * @param string $message
-     * @param int $code
-     * @param string $property
-     * @param mixed $value
+     *
+     * @param mixed|null $value
      */
-    public function __construct($message = '', $code = 0, $property = '', $value = null)
+    public function __construct(string $message = '', int $code = 0, string $property = '', mixed $value = null)
     {
         parent::__construct($message, $code, $property);
-        if ($value !== null) {
+        if (null !== $value) {
             $this->invalidValue = $value;
         }
     }
 
-    /**
-     * @return mixed
-     */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->invalidValue;
     }

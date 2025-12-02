@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,12 +28,27 @@ namespace YooKassa\Model\Deal;
 
 use YooKassa\Common\AbstractEnum;
 
+/**
+ * Класс, представляющий модель DealType.
+ *
+ * Тип сделки. Фиксированное значение:
+ * ~`safe_deal` — Безопасная сделка.
+ *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
+ */
 class DealType extends AbstractEnum
 {
     /** Безопасная сделка */
-    const SAFE_DEAL = 'safe_deal';
+    public const SAFE_DEAL = 'safe_deal';
 
-    protected static $validValues = array(
+    /**
+     * Возвращает список доступных значений
+     * @return string[]
+     */
+    protected static array $validValues = [
         self::SAFE_DEAL => true,
-    );
+    ];
 }

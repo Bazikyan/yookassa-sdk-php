@@ -5,7 +5,7 @@
 ---
 **Summary:**
 
-Interface ApiClientInterface
+Interface ApiClientInterface.
 
 ---
 ### Constants
@@ -16,17 +16,27 @@ Interface ApiClientInterface
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
 | public | [call()](../classes/YooKassa-Client-ApiClientInterface.md#method_call) |  | Создает CURL запрос, получает и возвращает обработанный ответ |
-| public | [getUserAgent()](../classes/YooKassa-Client-ApiClientInterface.md#method_getUserAgent) |  | Возвращает UserAgent |
-| public | [setBearerToken()](../classes/YooKassa-Client-ApiClientInterface.md#method_setBearerToken) |  | Устанавливает OAuth-токен магазина |
-| public | [setConfig()](../classes/YooKassa-Client-ApiClientInterface.md#method_setConfig) |  | Устанавливает настройки |
-| public | [setLogger()](../classes/YooKassa-Client-ApiClientInterface.md#method_setLogger) |  | Устанавливает объект для логирования |
-| public | [setShopId()](../classes/YooKassa-Client-ApiClientInterface.md#method_setShopId) |  | Устанавливает shopId магазина |
-| public | [setShopPassword()](../classes/YooKassa-Client-ApiClientInterface.md#method_setShopPassword) |  | Устанавливает секретный ключ магазина |
+| public | [getUserAgent()](../classes/YooKassa-Client-ApiClientInterface.md#method_getUserAgent) |  | Возвращает UserAgent. |
+| public | [setAdvancedCurlOptions()](../classes/YooKassa-Client-ApiClientInterface.md#method_setAdvancedCurlOptions) |  | Устанавливает дополнительные настройки curl. |
+| public | [setBearerToken()](../classes/YooKassa-Client-ApiClientInterface.md#method_setBearerToken) |  | Устанавливает OAuth-токен магазина. |
+| public | [setConfig()](../classes/YooKassa-Client-ApiClientInterface.md#method_setConfig) |  | Устанавливает настройки. |
+| public | [setLogger()](../classes/YooKassa-Client-ApiClientInterface.md#method_setLogger) |  | Устанавливает объект для логирования. |
+| public | [setShopId()](../classes/YooKassa-Client-ApiClientInterface.md#method_setShopId) |  | Устанавливает shopId магазина. |
+| public | [setShopPassword()](../classes/YooKassa-Client-ApiClientInterface.md#method_setShopPassword) |  | Устанавливает секретный ключ магазина. |
 
 ---
 ### Details
 * File: [lib/Client/ApiClientInterface.php](../../lib/Client/ApiClientInterface.php)
 * Package: \YooKassa
+* See Also:
+  * [](https://yookassa.ru/developers/api)
+
+---
+### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| category |  | Interface |
+| author |  | cms@yoomoney.ru |
 
 ---
 ## Methods
@@ -34,7 +44,7 @@ Interface ApiClientInterface
 #### public call() : \YooKassa\Common\ResponseObject
 
 ```php
-public call(string $path, string $method, array $queryParams, string|null $httpBody = null, array $headers = array()) : \YooKassa\Common\ResponseObject
+public call(string $path, string $method, array $queryParams, null|string $httpBody = null, array $headers = []) : \YooKassa\Common\ResponseObject
 ```
 
 **Summary**
@@ -50,7 +60,7 @@ public call(string $path, string $method, array $queryParams, string|null $httpB
 | <code lang="php">string</code> | path  | URL запроса |
 | <code lang="php">string</code> | method  | HTTP метод |
 | <code lang="php">array</code> | queryParams  | Массив GET параметров запроса |
-| <code lang="php">string OR null</code> | httpBody  | Тело запроса |
+| <code lang="php">null OR string</code> | httpBody  | Тело запроса |
 | <code lang="php">array</code> | headers  | Массив заголовков запроса |
 
 **Returns:** \YooKassa\Common\ResponseObject - 
@@ -60,12 +70,12 @@ public call(string $path, string $method, array $queryParams, string|null $httpB
 #### public setLogger() : mixed
 
 ```php
-public setLogger(\Psr\Log\LoggerInterface|null $logger) : mixed
+public setLogger(null|\Psr\Log\LoggerInterface $logger) : mixed
 ```
 
 **Summary**
 
-Устанавливает объект для логирования
+Устанавливает объект для логирования.
 
 **Details:**
 * Inherited From: [\YooKassa\Client\ApiClientInterface](../classes/YooKassa-Client-ApiClientInterface.md)
@@ -73,7 +83,7 @@ public setLogger(\Psr\Log\LoggerInterface|null $logger) : mixed
 ##### Parameters:
 | Type | Name | Description |
 | ---- | ---- | ----------- |
-| <code lang="php">\Psr\Log\LoggerInterface OR null</code> | logger  | Объект для логирования |
+| <code lang="php">null OR \Psr\Log\LoggerInterface</code> | logger  | Объект для логирования |
 
 **Returns:** mixed - 
 
@@ -87,7 +97,7 @@ public getUserAgent() : \YooKassa\Client\UserAgent
 
 **Summary**
 
-Возвращает UserAgent
+Возвращает UserAgent.
 
 **Details:**
 * Inherited From: [\YooKassa\Client\ApiClientInterface](../classes/YooKassa-Client-ApiClientInterface.md)
@@ -99,12 +109,12 @@ public getUserAgent() : \YooKassa\Client\UserAgent
 #### public setShopId() : mixed
 
 ```php
-public setShopId(string|int $shopId) : mixed
+public setShopId(int|string|null $shopId) : mixed
 ```
 
 **Summary**
 
-Устанавливает shopId магазина
+Устанавливает shopId магазина.
 
 **Details:**
 * Inherited From: [\YooKassa\Client\ApiClientInterface](../classes/YooKassa-Client-ApiClientInterface.md)
@@ -112,7 +122,7 @@ public setShopId(string|int $shopId) : mixed
 ##### Parameters:
 | Type | Name | Description |
 | ---- | ---- | ----------- |
-| <code lang="php">string OR int</code> | shopId  | shopId магазина |
+| <code lang="php">int OR string OR null</code> | shopId  | shopId магазина |
 
 **Returns:** mixed - 
 
@@ -121,12 +131,12 @@ public setShopId(string|int $shopId) : mixed
 #### public setShopPassword() : mixed
 
 ```php
-public setShopPassword(string $shopPassword) : mixed
+public setShopPassword(?string $shopPassword) : mixed
 ```
 
 **Summary**
 
-Устанавливает секретный ключ магазина
+Устанавливает секретный ключ магазина.
 
 **Details:**
 * Inherited From: [\YooKassa\Client\ApiClientInterface](../classes/YooKassa-Client-ApiClientInterface.md)
@@ -134,7 +144,7 @@ public setShopPassword(string $shopPassword) : mixed
 ##### Parameters:
 | Type | Name | Description |
 | ---- | ---- | ----------- |
-| <code lang="php">string</code> | shopPassword  |  |
+| <code lang="php">?string</code> | shopPassword  |  |
 
 **Returns:** mixed - 
 
@@ -143,12 +153,12 @@ public setShopPassword(string $shopPassword) : mixed
 #### public setBearerToken() : mixed
 
 ```php
-public setBearerToken(string $bearerToken) : mixed
+public setBearerToken(?string $bearerToken) : mixed
 ```
 
 **Summary**
 
-Устанавливает OAuth-токен магазина
+Устанавливает OAuth-токен магазина.
 
 **Details:**
 * Inherited From: [\YooKassa\Client\ApiClientInterface](../classes/YooKassa-Client-ApiClientInterface.md)
@@ -156,7 +166,7 @@ public setBearerToken(string $bearerToken) : mixed
 ##### Parameters:
 | Type | Name | Description |
 | ---- | ---- | ----------- |
-| <code lang="php">string</code> | bearerToken  |  |
+| <code lang="php">?string</code> | bearerToken  |  |
 
 **Returns:** mixed - 
 
@@ -170,7 +180,7 @@ public setConfig(array $config) : mixed
 
 **Summary**
 
-Устанавливает настройки
+Устанавливает настройки.
 
 **Details:**
 * Inherited From: [\YooKassa\Client\ApiClientInterface](../classes/YooKassa-Client-ApiClientInterface.md)
@@ -181,6 +191,23 @@ public setConfig(array $config) : mixed
 | <code lang="php">array</code> | config  |  |
 
 **Returns:** mixed - 
+
+
+<a name="method_setAdvancedCurlOptions" class="anchor"></a>
+#### public setAdvancedCurlOptions() : void
+
+```php
+public setAdvancedCurlOptions() : void
+```
+
+**Summary**
+
+Устанавливает дополнительные настройки curl.
+
+**Details:**
+* Inherited From: [\YooKassa\Client\ApiClientInterface](../classes/YooKassa-Client-ApiClientInterface.md)
+
+**Returns:** void - 
 
 
 
@@ -196,10 +223,10 @@ public setConfig(array $config) : mixed
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

@@ -1,113 +1,179 @@
 <?php
 
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
+
 namespace Tests\YooKassa\Model\Notification;
 
-use YooKassa\Helpers\Random;
+use Exception;
+use InvalidArgumentException;
+use Tests\YooKassa\AbstractTestCase;
+use Datetime;
+use YooKassa\Model\Metadata;
 use YooKassa\Model\Notification\NotificationPayoutSucceeded;
-use YooKassa\Model\NotificationEventType;
-use YooKassa\Model\NotificationType;
-use YooKassa\Model\PayoutInterface;
-use YooKassa\Model\PaymentMethodType;
-use YooKassa\Model\Payout;
-use YooKassa\Model\PayoutStatus;
+use YooKassa\Model\Receipt\SettlementType;
 
-class NotificationPayoutSucceededTest extends AbstractNotificationTest
+/**
+ * NotificationPayoutSucceededTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
+class NotificationPayoutSucceededTest extends AbstractTestCase
 {
+    protected NotificationPayoutSucceeded $object;
+
     /**
-     * @param array $source
+     * @param mixed|null $value
      * @return NotificationPayoutSucceeded
-     * @throws \Exception
      */
-    protected function getTestInstance(array $source)
+    protected function getTestInstance(mixed $value = null): NotificationPayoutSucceeded
     {
-        return new NotificationPayoutSucceeded($source);
+        return new NotificationPayoutSucceeded($value);
     }
 
     /**
-     * @return string
+     * @return void
      */
-    protected function getExpectedType()
+    public function testNotificationPayoutSucceededClassExists(): void
     {
-        return NotificationType::NOTIFICATION;
+        $this->object = $this->getMockBuilder(NotificationPayoutSucceeded::class)->getMockForAbstractClass();
+        $this->assertTrue(class_exists(NotificationPayoutSucceeded::class));
+        $this->assertInstanceOf(NotificationPayoutSucceeded::class, $this->object);
     }
 
     /**
-     * @return string
+     * Test property "object"
+     * @dataProvider validObjectDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
      */
-    protected function getExpectedEvent()
+    public function testAmount(mixed $value): void
     {
-        return NotificationEventType::PAYOUT_SUCCEEDED;
+        $instance = $this->getTestInstance();
+        $instance->setObject($value);
+        self::assertNotNull($instance->getObject());
+        self::assertNotNull($instance->object);
+        self::assertEquals($value, is_array($value) ? $instance->getObject()->toArray() : $instance->getObject());
+        self::assertEquals($value, is_array($value) ? $instance->object->toArray() : $instance->object);
     }
 
     /**
-     * @dataProvider validDataProvider
-     * @param array $value
+     * Test invalid property "object"
+     * @dataProvider invalidObjectDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
      */
-    public function testGetObject(array $value)
+    public function testInvalidObject(mixed $value, string $exceptionClass): void
     {
-        $instance = $this->getTestInstance($value);
-        self::assertTrue($instance->getObject() instanceof PayoutInterface);
-        self::assertEquals($value['object']['id'], $instance->getObject()->getId());
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setObject($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validObjectDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_object'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidObjectDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_object'));
+    }
+
+    /**
+     * Test valid method "fromArray"
+     * @dataProvider validClassDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function testFromArray(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        $instance->fromArray($value->toArray());
+        self::assertEquals($value['object'], $instance->getObject());
     }
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function validDataProvider()
+    public function validClassDataProvider(): array
     {
-        $result = array();
-        $payoutDestinations = array(
-            PaymentMethodType::YOO_MONEY => array(
-                'type' => PaymentMethodType::YOO_MONEY,
-                'account_number' => Random::str(11, 33, '1234567890')
-            ),
-            PaymentMethodType::BANK_CARD => array(
-                'type' => PaymentMethodType::BANK_CARD,
-                'card' => array(
-                    'number' => Random::str(16, 18, '1234567890')
-                )
-            ),
-        );
+        $instance = $this->getTestInstance();
+        $objects = $this->validObjectDataProvider();
+        $instance->setObject(array_shift($objects[0]));
+        return [[$instance]];
+    }
 
-        $result[] = array(
-            array(
-                'type' => $this->getExpectedType(),
-                'event' => $this->getExpectedEvent(),
-                'object' => array(
-                    'id' => Random::str(36, 50),
-                    'status' => Random::value(PayoutStatus::getValidValues()),
-                    'amount' => array('value' => Random::int(1, 10000), 'currency' => 'RUB'),
-                    'description' => Random::str(1, Payout::MAX_LENGTH_DESCRIPTION),
-                    'payout_destination' => $payoutDestinations[Random::value(array(PaymentMethodType::YOO_MONEY,PaymentMethodType::BANK_CARD))],
-                    'created_at' => date(YOOKASSA_DATE, mt_rand(111111111, time())),
-                    'test' => true,
-                    'deal' => array('id' => Random::str(36, 50)),
-                    'metadata' => array('order_id' => '37'),
-                ),
-            ),
-        );
+    /**
+     * @dataProvider invalidDataProvider
+     */
+    public function testInvalidFromArray(array $options): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->getTestInstance($options);
+    }
 
-        for ($i = 0; $i < 20; $i++) {
-            $object = array(
-                'id' => Random::str(36, 50),
-                'status' => Random::value(PayoutStatus::getValidValues()),
-                'amount' =>  array('value' => Random::int(1, 10000), 'currency' => 'RUB'),
-                'description' => ($i == 0 ? null : ($i == 1 ? '' : ($i == 2 ? Random::str(Payout::MAX_LENGTH_DESCRIPTION)
-                    : Random::str(1, Payout::MAX_LENGTH_DESCRIPTION)))),
-                'payout_destination' => $payoutDestinations[Random::value(array(PaymentMethodType::YOO_MONEY,PaymentMethodType::BANK_CARD))],
-                'created_at' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                'test' => (bool)($i % 2),
-                'metadata' => array(Random::str(3, 128, 'abcdefghijklmnopqrstuvwxyz') => Random::str(1, 512)),
-            );
-            $result[] = array(
-                array(
-                    'type' => $this->getExpectedType(),
-                    'event' => $this->getExpectedEvent(),
-                    'object' => $object,
-                ),
-            );
-        }
-        return $result;
+    /**
+     * @return \array[][]
+     */
+    public static function invalidDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'type' => SettlementType::PREPAYMENT,
+                ],
+            ],
+            [
+                [
+                    'event' => SettlementType::PREPAYMENT,
+                ],
+            ],
+            [
+                [
+                    'object' => [],
+                ],
+            ],
+        ];
     }
 }

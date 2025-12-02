@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,134 +26,265 @@
 
 namespace YooKassa\Request\Payouts;
 
+use YooKassa\Common\ListObjectInterface;
 use YooKassa\Model\AmountInterface;
-use YooKassa\Model\DealInterface;
-use YooKassa\Model\Metadata;
-use YooKassa\Model\MonetaryAmount;
 use YooKassa\Model\Deal\PayoutDealInfo;
+use YooKassa\Model\Metadata;
 use YooKassa\Model\Payout\AbstractPayoutDestination;
 
 /**
- * Interface CreatePayoutRequestInterface
+ * Interface CreatePayoutRequestInterface.
  *
- * @package YooKassa
- *
+ * @category Interface
+ * @package  YooKassa\Request
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  * @property AmountInterface $amount Сумма создаваемой выплаты
  * @property AbstractPayoutDestination $payoutDestinationData Данные платежного средства, на которое нужно сделать выплату. Обязательный параметр, если не передан payout_token.
  * @property AbstractPayoutDestination $payout_destination_data Данные платежного средства, на которое нужно сделать выплату. Обязательный параметр, если не передан payout_token.
  * @property string $payoutToken Токенизированные данные для выплаты. Например, синоним банковской карты. Обязательный параметр, если не передан payout_destination_data
  * @property string $payout_token Токенизированные данные для выплаты. Например, синоним банковской карты. Обязательный параметр, если не передан payout_destination_data
- * @property DealInterface $deal Сделка, в рамках которой нужно провести выплату. Необходимо передавать, если вы проводите Безопасную сделку
+ * @property string $payment_method_id Идентификатор сохраненного способа оплаты, данные которого нужно использовать для проведения выплаты
+ * @property string $paymentMethodId Идентификатор сохраненного способа оплаты, данные которого нужно использовать для проведения выплаты
+ * @property PayoutDealInfo $deal Сделка, в рамках которой нужно провести выплату. Необходимо передавать, если вы проводите Безопасную сделку
  * @property string $description Описание транзакции (не более 128 символов). Например: «Выплата по договору N»
+ * @property PayoutSelfEmployedInfo $self_employed Данные самозанятого, который получит выплату. Необходимо передавать, если вы делаете выплату [самозанятому](https://yookassa.ru/developers/payouts/scenario-extensions/self-employed). Только для обычных выплат.
+ * @property PayoutSelfEmployedInfo $selfEmployed Данные самозанятого, который получит выплату. Необходимо передавать, если вы делаете выплату [самозанятому](https://yookassa.ru/developers/payouts/scenario-extensions/self-employed). Только для обычных выплат.
+ * @property IncomeReceiptData $receipt_data Данные для формирования чека в сервисе Мой налог. Необходимо передавать, если вы делаете выплату [самозанятому](https://yookassa.ru/developers/payouts/scenario-extensions/self-employed). Только для обычных выплат.
+ * @property IncomeReceiptData $receiptData Данные для формирования чека в сервисе Мой налог. Необходимо передавать, если вы делаете выплату [самозанятому](https://yookassa.ru/developers/payouts/scenario-extensions/self-employed). Только для обычных выплат.
+ * @property PayoutPersonalData $personal_data Персональные данные получателя выплаты. Необходимо передавать, если вы делаете выплаты с [проверкой получателя](/developers/payouts/scenario-extensions/recipient-check) (только для выплат через СБП).
+ * @property PayoutPersonalData $personalData Персональные данные получателя выплаты. Необходимо передавать, если вы делаете выплаты с [проверкой получателя](/developers/payouts/scenario-extensions/recipient-check) (только для выплат через СБП).
  * @property Metadata $metadata Метаданные привязанные к выплате
  */
 interface CreatePayoutRequestInterface
 {
     /**
-     * Возвращает сумму выплаты
-     * @return AmountInterface|MonetaryAmount Сумма выплаты
+     * Возвращает сумму выплаты.
+     *
+     * @return AmountInterface|null Сумма выплаты
      */
-    function getAmount();
+    public function getAmount(): ?AmountInterface;
 
     /**
-     * Проверяет наличие суммы в создаваемой выплате
+     * Проверяет наличие суммы в создаваемой выплате.
+     *
      * @return bool True если сумма установлена, false если нет
      */
-    function hasAmount();
+    public function hasAmount(): bool;
 
     /**
-     * Устанавливает сумму выплаты
-     * @param AmountInterface|array Сумма выплаты
+     * Устанавливает сумму выплаты.
+     *
+     * @param AmountInterface|array $amount Сумма выплаты
+     *
+     * @return self
      */
-    function setAmount($value);
+    public function setAmount(mixed $amount): self;
 
     /**
-     * Возвращает данные платежного средства, на которое нужно сделать выплату
-     * @return AbstractPayoutDestination|null Данные платежного средства, на которое нужно сделать выплату
+     * Возвращает данные платежного средства, на которое нужно сделать выплату.
+     *
+     * @return null|AbstractPayoutDestination Данные платежного средства, на которое нужно сделать выплату
      */
-    function getPayoutDestinationData();
+    public function getPayoutDestinationData(): ?AbstractPayoutDestination;
 
     /**
-     * Проверяет наличие данных платежного средства, на которое нужно сделать выплату
+     * Проверяет наличие данных платежного средства, на которое нужно сделать выплату.
+     *
      * @return bool True если данные есть, false если нет
      */
-    function hasPayoutDestinationData();
+    public function hasPayoutDestinationData(): bool;
 
     /**
-     * Устанавливает данные платежного средства, на которое нужно сделать выплату
-     * @param AbstractPayoutDestination|array|null $value Данные платежного средства, на которое нужно сделать выплату
+     * Устанавливает данные платежного средства, на которое нужно сделать выплату.
+     *
+     * @param null|AbstractPayoutDestination|array $payout_destination_data Данные платежного средства, на которое нужно сделать выплату
+     *
+     * @return self
      */
-    function setPayoutDestinationData($value);
+    public function setPayoutDestinationData(mixed $payout_destination_data): self;
 
     /**
-     * Возвращает токенизированные данные для выплаты
-     * @return string Токенизированные данные для выплаты
+     * Возвращает токенизированные данные для выплаты.
+     *
+     * @return string|null Токенизированные данные для выплаты
      */
-    function getPayoutToken();
+    public function getPayoutToken(): ?string;
 
     /**
-     * Проверяет наличие токенизированных данных для выплаты
+     * Проверяет наличие токенизированных данных для выплаты.
+     *
      * @return bool True если токен установлен, false если нет
      */
-    function hasPayoutToken();
+    public function hasPayoutToken(): bool;
 
     /**
-     * Устанавливает токенизированные данные для выплаты
-     * @param string $value Токенизированные данные для выплаты
+     * Устанавливает токенизированные данные для выплаты.
+     *
+     * @param string|null $payout_token Токенизированные данные для выплаты
+     *
+     * @return self
      */
-    function setPayoutToken($value);
+    public function setPayoutToken(?string $payout_token): self;
 
     /**
-     * Возвращает описание транзакции
-     * @return string Описание транзакции
+     * Возвращает идентификатор сохраненного способа оплаты.
+     *
+     * @return null|string Идентификатор сохраненного способа оплаты
      */
-    function getDescription();
+    public function getPaymentMethodId(): ?string;
 
     /**
-     * Проверяет наличие описания транзакции в создаваемой выплате
+     * Проверяет наличие идентификатора сохраненного способа оплаты.
+     *
+     * @return bool True если идентификатора установлен, false если нет
+     */
+    public function hasPaymentMethodId(): bool;
+
+    /**
+     * Устанавливает идентификатор сохраненного способа оплаты.
+     *
+     * @param null|string $payment_method_id Идентификатор сохраненного способа оплаты
+     *
+     * @return self
+     */
+    public function setPaymentMethodId(?string $payment_method_id): self;
+
+    /**
+     * Возвращает описание транзакции.
+     *
+     * @return string|null Описание транзакции
+     */
+    public function getDescription(): ?string;
+
+    /**
+     * Проверяет наличие описания транзакции в создаваемой выплате.
+     *
      * @return bool True если описание транзакции установлено, false если нет
      */
-    function hasDescription();
+    public function hasDescription(): bool;
 
     /**
-     * Устанавливает описание транзакции
-     * @param string $value Описание транзакции
+     * Устанавливает описание транзакции.
+     *
+     * @param string|null $description Описание транзакции
+     *
+     * @return self
      */
-    function setDescription($value);
+    public function setDescription(?string $description): self;
 
     /**
-     * Возвращает сделку, в рамках которой нужно провести выплату
-     * @return PayoutDealInfo|null Сделка, в рамках которой нужно провести выплату
+     * Возвращает сделку, в рамках которой нужно провести выплату.
+     *
+     * @return null|PayoutDealInfo Сделка, в рамках которой нужно провести выплату
      */
-    function getDeal();
+    public function getDeal(): ?PayoutDealInfo;
 
     /**
-     * Проверяет установлена ли сделка, в рамках которой нужно провести выплату
+     * Проверяет установлена ли сделка, в рамках которой нужно провести выплату.
+     *
      * @return bool True если сделка установлена, false если нет
      */
-    function hasDeal();
+    public function hasDeal(): bool;
 
     /**
-     * Устанавливает сделку, в рамках которой нужно провести выплату
-     * @param PayoutDealInfo|array|null $value Сделка, в рамках которой нужно провести выплату
+     * Устанавливает сделку, в рамках которой нужно провести выплату.
+     *
+     * @param null|array|PayoutDealInfo $deal Сделка, в рамках которой нужно провести выплату
+     *
+     * @return self
      */
-    function setDeal($value);
+    public function setDeal(mixed $deal): self;
+
+    /**
+     * Возвращает данные самозанятого, который получит выплату.
+     *
+     * @return null|PayoutSelfEmployedInfo Данные самозанятого, который получит выплату
+     */
+    public function getSelfEmployed(): ?PayoutSelfEmployedInfo;
+
+    /**
+     * Проверяет наличие данных самозанятого в создаваемой выплате.
+     *
+     * @return bool True если данные самозанятого есть, false если нет
+     */
+    public function hasSelfEmployed(): bool;
+
+    /**
+     * Устанавливает данные самозанятого, который получит выплату.
+     *
+     * @param null|array|PayoutSelfEmployedInfo $self_employed Данные самозанятого, который получит выплату
+     *
+     * @return self
+     */
+    public function setSelfEmployed(mixed $self_employed): self;
+
+    /**
+     * Возвращает данные для формирования чека в сервисе Мой налог.
+     *
+     * @return null|IncomeReceiptData Данные для формирования чека в сервисе Мой налог
+     */
+    public function getReceiptData(): ?IncomeReceiptData;
+
+    /**
+     * Проверяет наличие данных для формирования чека в сервисе Мой налог.
+     *
+     * @return bool True если данные для формирования чека есть, false если нет
+     */
+    public function hasReceiptData(): bool;
+
+    /**
+     * Устанавливает данные для формирования чека в сервисе Мой налог..
+     *
+     * @param null|array|IncomeReceiptData $receipt_data Данные для формирования чека в сервисе Мой налог
+     *
+     * @return self
+     */
+    public function setReceiptData(mixed $receipt_data): self;
+
+    /**
+     * Возвращает персональные данные получателя выплаты.
+     *
+     * @return PayoutPersonalData[]|ListObjectInterface Персональные данные получателя выплаты
+     */
+    public function getPersonalData(): ListObjectInterface;
+
+    /**
+     * Проверяет наличие персональных данных в создаваемой выплате.
+     *
+     * @return bool True если персональные данные есть, false если нет
+     */
+    public function hasPersonalData(): bool;
+
+    /**
+     * Устанавливает персональные данные получателя выплаты.
+     *
+     * @param null|array|ListObjectInterface $personal_data Персональные данные получателя выплаты
+     *
+     * @return self
+     */
+    public function setPersonalData(?array $personal_data = null): self;
 
     /**
      * Возвращает данные оплаты установленные мерчантом
-     * @return Metadata Метаданные привязанные к выплате
+     *
+     * @return Metadata|null Метаданные привязанные к выплате
      */
-    function getMetadata();
+    public function getMetadata(): ?Metadata;
 
     /**
-     * Проверяет, были ли установлены метаданные заказа
+     * Проверяет, были ли установлены метаданные заказа.
+     *
      * @return bool True если метаданные были установлены, false если нет
      */
-    function hasMetadata();
+    public function hasMetadata(): bool;
 
     /**
-     * Устанавливает метаданные, привязанные к выплате
-     * @param Metadata|array|null $value Метаданные платежа, устанавливаемые мерчантом
+     * Устанавливает метаданные, привязанные к выплате.
+     *
+     * @param null|array|Metadata $metadata Метаданные платежа, устанавливаемые мерчантом
+     *
+     * @return self
      */
-    function setMetadata($value);
+    public function setMetadata(mixed $metadata): self;
 }

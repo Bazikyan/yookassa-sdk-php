@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,37 +26,35 @@
 
 namespace YooKassa\Request\Receipts;
 
-
-use YooKassa\Model\ReceiptType;
+use InvalidArgumentException;
+use YooKassa\Model\Receipt\ReceiptType;
 
 /**
- * Фабричный класс для работы с чеками
- *
- * @package YooKassa
+ * Фабричный класс для работы с чеками.
  */
 class ReceiptResponseFactory
 {
-    private $typeClassMap = array(
+    private array $typeClassMap = [
         ReceiptType::PAYMENT => 'PaymentReceiptResponse',
-        ReceiptType::REFUND  => 'RefundReceiptResponse',
-        ReceiptType::SIMPLE  => 'SimpleReceiptResponse',
-    );
+        ReceiptType::REFUND => 'RefundReceiptResponse',
+        ReceiptType::SIMPLE => 'SimpleReceiptResponse',
+    ];
 
     /**
-     * Фабричный метод для работы с чеками
+     * Фабричный метод для работы с чеками.
      *
      * @param array $data Массив с данными чека
      *
-     * @return AbstractReceiptResponse|SimpleReceiptResponse|PaymentReceiptResponse|RefundReceiptResponse Объект чека определенного типа
+     * @return AbstractReceiptResponse|PaymentReceiptResponse|RefundReceiptResponse|SimpleReceiptResponse Объект чека определенного типа
      */
-    public function factory($data)
+    public function factory(array $data)
     {
         if (array_key_exists('type', $data)) {
             if (!is_string($data['type'])) {
-                throw new \InvalidArgumentException('Invalid receipt type value in receipt factory');
+                throw new InvalidArgumentException('Invalid receipt type value in receipt factory');
             }
             if (!in_array($data['type'], ReceiptType::getEnabledValues())) {
-                throw new \InvalidArgumentException('Invalid receipt data type "' . $data['type'] . '"');
+                throw new InvalidArgumentException('Invalid receipt data type "' . $data['type'] . '"');
             }
             if (array_key_exists('refund_id', $data)) {
                 $type = ReceiptType::REFUND;
@@ -66,7 +64,7 @@ class ReceiptResponseFactory
                 $type = ReceiptType::SIMPLE;
             }
         } else {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Parameter type not specified in ReceiptResponseFactory.factory()'
             );
         }

@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,19 +30,16 @@ use Exception;
 
 /**
  * Требуемое PHP расширение не установлено.
- *
- * @package YooKassa
  */
 class ExtensionNotFoundException extends Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $name extension name
      * @param int $code error code
      */
-
-    public function __construct($name, $code = 0)
+    public function __construct(string $name, int $code = 0)
     {
         $message = sprintf('%s extension is not loaded!', $name);
 

@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,25 +27,24 @@
 namespace YooKassa\Model;
 
 /**
- * Interface CancellationDetailsInterface
+ * Interface CancellationDetailsInterface.
  *
- * @package YooKassa
- *
- * @property-read string $party Участник процесса платежа, который принял решение об отмене транзакции.
- * @property-read string $reason Причина отмены платежа.
+ * @property string $party Участник процесса платежа, который принял решение об отмене транзакции.
+ * @property string $reason Причина отмены платежа.
  */
 interface CancellationDetailsInterface
 {
     /**
-     * Возвращает участника процесса платежа, который принял решение об отмене транзакции
+     * Возвращает участника процесса платежа, который принял решение об отмене транзакции.
+     *
      * @return string Участник процесса платежа
      */
-    function getParty();
+    public function getParty(): string;
 
     /**
-     * Возвращает причину отмены платежа
+     * Возвращает причину отмены платежа.
+     *
      * @return string Причина отмены платежа
      */
-    function getReason();
-
+    public function getReason(): string;
 }

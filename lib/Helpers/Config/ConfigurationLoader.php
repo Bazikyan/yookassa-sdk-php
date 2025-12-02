@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,26 +26,41 @@
 
 namespace YooKassa\Helpers\Config;
 
+use JsonException;
+
+/**
+ * Класс, представляющий модель ConfigurationLoader.
+ *
+ * Класс для загрузки конфига Curl клиента.
+ *
+ * @category Class
+ * @package  YooKassa\Helpers
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
+ */
 class ConfigurationLoader implements ConfigurationLoaderInterface
 {
-    private $configParams;
+    private array $configParams;
 
-    public function load($filePath = null)
+    /**
+     * @throws JsonException
+     */
+    public function load($filePath = null): self
     {
         if ($filePath) {
             $data = file_get_contents($filePath);
         } else {
-            $data = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "configuration.json");
+            $data = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'configuration.json');
         }
 
-        $paramsArray = json_decode($data, true);
+        $paramsArray = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
 
         $this->configParams = $paramsArray;
 
         return $this;
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->configParams;
     }

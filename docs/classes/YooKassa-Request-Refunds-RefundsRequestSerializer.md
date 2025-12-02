@@ -5,8 +5,11 @@
 ---
 **Summary:**
 
-Класс сериализатора объектов запросов к API для получения списка возвратов
+Класс, представляющий модель RefundsRequestSerializer.
 
+**Description:**
+
+Класс сериализатора объектов запросов к API для получения списка возвратов.
 
 ---
 ### Constants
@@ -16,14 +19,24 @@
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [serialize()](../classes/YooKassa-Request-Refunds-RefundsRequestSerializer.md#method_serialize) |  | Сериализует объект запроса к API для дальнейшей его отправки |
+| public | [serialize()](../classes/YooKassa-Request-Refunds-RefundsRequestSerializer.md#method_serialize) |  | Сериализует объект запроса к API для дальнейшей его отправки. |
 
 ---
 ### Details
 * File: [lib/Request/Refunds/RefundsRequestSerializer.php](../../lib/Request/Refunds/RefundsRequestSerializer.php)
-* Package: YooKassa
+* Package: YooKassa\Request
 * Class Hierarchy:
   * \YooKassa\Request\Refunds\RefundsRequestSerializer
+
+* See Also:
+  * [](https://yookassa.ru/developers/api)
+
+---
+### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| category |  | Class |
+| author |  | cms@yoomoney.ru |
 
 ---
 ## Methods
@@ -36,7 +49,7 @@ public serialize(\YooKassa\Request\Refunds\RefundsRequestInterface $request) : a
 
 **Summary**
 
-Сериализует объект запроса к API для дальнейшей его отправки
+Сериализует объект запроса к API для дальнейшей его отправки.
 
 **Details:**
 * Inherited From: [\YooKassa\Request\Refunds\RefundsRequestSerializer](../classes/YooKassa-Request-Refunds-RefundsRequestSerializer.md)
@@ -61,10 +74,10 @@ public serialize(\YooKassa\Request\Refunds\RefundsRequestInterface $request) : a
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

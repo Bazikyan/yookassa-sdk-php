@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,49 +26,41 @@
 
 namespace YooKassa\Model\Notification;
 
-use YooKassa\Model\Notification\AbstractNotification;
-use YooKassa\Model\NotificationEventType;
+use InvalidArgumentException;
 
 /**
  * Фабрика для получения конкретного объекта уведомления.
  *
  * @example 03-notification.php 3 Пример скрипта обработки уведомления
- *
- * @package YooKassa
  */
 class NotificationFactory
 {
-    private $typeClassMap = array(
-        NotificationEventType::PAYMENT_CANCELED            => 'NotificationCanceled',
-        NotificationEventType::REFUND_SUCCEEDED            => 'NotificationRefundSucceeded',
-        NotificationEventType::PAYMENT_SUCCEEDED           => 'NotificationSucceeded',
+    private array $typeClassMap = [
+        NotificationEventType::PAYMENT_CANCELED => 'NotificationCanceled',
+        NotificationEventType::REFUND_SUCCEEDED => 'NotificationRefundSucceeded',
+        NotificationEventType::PAYMENT_SUCCEEDED => 'NotificationSucceeded',
         NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE => 'NotificationWaitingForCapture',
 
-        NotificationEventType::DEAL_CLOSED                 => 'NotificationDealClosed',
-        NotificationEventType::PAYOUT_CANCELED             => 'NotificationPayoutCanceled',
-        NotificationEventType::PAYOUT_SUCCEEDED            => 'NotificationPayoutSucceeded',
-    );
+        NotificationEventType::DEAL_CLOSED => 'NotificationDealClosed',
+        NotificationEventType::PAYOUT_CANCELED => 'NotificationPayoutCanceled',
+        NotificationEventType::PAYOUT_SUCCEEDED => 'NotificationPayoutSucceeded',
+    ];
 
-    /**
-     * @param array $data
-     * @return AbstractNotification
-     */
-    public function factory(array $data)
+    public function factory(array $data): AbstractNotification
     {
         if (!array_key_exists('event', $data)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Parameter event not specified in NotificationFactory.factory()'
             );
         }
         if (!is_string($data['event'])) {
-            throw new \InvalidArgumentException('Invalid notification type value in notification factory');
+            throw new InvalidArgumentException('Invalid notification type value in notification factory');
         }
         if (!array_key_exists($data['event'], $this->typeClassMap)) {
-            throw new \InvalidArgumentException('Invalid notification data type "' . $data['event'] . '"');
+            throw new InvalidArgumentException('Invalid notification data type "' . $data['event'] . '"');
         }
         $className = __NAMESPACE__ . '\\' . $this->typeClassMap[$data['event']];
 
         return new $className($data);
     }
-
 }

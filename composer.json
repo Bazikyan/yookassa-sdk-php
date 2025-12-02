@@ -1,8 +1,14 @@
 {
-  "name": "yoomoney/yookassa-sdk-php",
+  "name": "bazikyan/yookassa-sdk-php",
   "description": "This is a developer tool for integration with YooMoney.",
   "type": "library",
   "license": "MIT",
+  "repositories": [
+    {
+      "type": "github",
+      "url": "https://github.com/Bazikyan/yookassa-sdk-validator.git"
+    }
+  ],
   "homepage": "https://yookassa.ru/developers/api",
   "keywords": ["yoomoney", "yookassa", "payments", "api", "sdk"],
   "authors": [
@@ -11,37 +17,40 @@
       "email": "cms@yoomoney.ru"
     }
   ],
-  "version": "2.3.0",
+  "version": "3.8.0",
   "require": {
-    "php": ">=5.3.0",
+    "php": ">=8.0",
     "ext-curl": "*",
     "ext-json": "*",
     "ext-mbstring": "*",
-    "psr/log": "^1.0"
+    "bazikyan/yookassa-sdk-validator": "1.1.1",
+    "php-ds/php-ds": "^1.4",
+    "psr/log": "^2.0 || ^3.0"
   },
   "require-dev": {
     "ext-xml": "*",
-    "phpunit/phpunit": "^4.8.35 || ^5.7",
-    "mockery/mockery": "^0.9.9"
-  },
+    "phpunit/phpunit": "^9.6",
+    "mockery/mockery": "^1.5",
+    "php-parallel-lint/php-parallel-lint": "^1.3",
+    "phpmd/phpmd": "^2.13",
+    "friendsofphp/php-cs-fixer": "^3.15",
+    "phpstan/phpstan": "^1.10"},
   "scripts": {
     "test": [
       "@phpunit",
-      "@phpcbf",
-      "@phpcs",
+      "@phpcsf",
       "@phpmd"
     ],
     "ci": [
       "@phplint",
       "@phpunit",
-      "@phpcs",
+      "@phpcsf",
       "@phpmd"
     ],
-    "phplint": "vendor/bin/parallel-lint --exclude vendor/ --exclude .idea/ -e php,module,inc,install,profile,theme .",
-    "phpunit": "vendor/bin/phpunit --configuration=phpunit.xml.dist",
-    "phpcs": "vendor/bin/phpcs --ignore=vendor/,.idea/ --standard=phpcs.xml --extensions=php,module,inc,install,profile,theme,css,info,txt,md,yml --report=full .",
-    "phpcbf": "vendor/bin/phpcbf --ignore=vendor/,.idea/ --standard=phpcs.xml --extensions=php,module,inc,install,profile,theme,css,info,txt,md,yml .",
-    "phpmd": "vendor/bin/phpmd --exclude vendor/,.idea/ --suffixes php,module,inc,install,profile,theme . text phpmd.xml"
+    "phplint": "vendor/bin/parallel-lint --exclude vendor/ --exclude .idea/ --exclude tests/ --exclude lsp/ -e php .",
+    "phpunit": "vendor/bin/phpunit -derror_reporting=32759 --configuration=phpunit.xml.dist --no-coverage",
+    "phpcsf": "vendor/bin/php-cs-fixer fix . --config=.php-cs-fixer.dist.php",
+    "phpmd": "vendor/bin/phpmd --exclude vendor/,.idea/,tests/,lsp/ --suffixes php . text phpmd.xml"
   },
   "autoload": {
     "psr-4": {

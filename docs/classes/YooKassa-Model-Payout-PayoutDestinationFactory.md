@@ -5,8 +5,11 @@
 ---
 **Summary:**
 
-Фабрика создания объекта платежных методов из массива
+Класс, представляющий модель PayoutDestinationFactory.
 
+**Description:**
+
+Фабрика создания объекта платежных методов из массива.
 
 ---
 ### Constants
@@ -16,15 +19,25 @@
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [factory()](../classes/YooKassa-Model-Payout-PayoutDestinationFactory.md#method_factory) |  | Фабричный метод создания объекта платежных данных по типу |
-| public | [factoryFromArray()](../classes/YooKassa-Model-Payout-PayoutDestinationFactory.md#method_factoryFromArray) |  | Фабричный метод создания объекта платежных данных из массива |
+| public | [factory()](../classes/YooKassa-Model-Payout-PayoutDestinationFactory.md#method_factory) |  | Фабричный метод создания объекта платежных данных по типу. |
+| public | [factoryFromArray()](../classes/YooKassa-Model-Payout-PayoutDestinationFactory.md#method_factoryFromArray) |  | Фабричный метод создания объекта платежных данных из массива. |
 
 ---
 ### Details
 * File: [lib/Model/Payout/PayoutDestinationFactory.php](../../lib/Model/Payout/PayoutDestinationFactory.php)
-* Package: YooKassa
+* Package: YooKassa\Model
 * Class Hierarchy:
   * \YooKassa\Model\Payout\PayoutDestinationFactory
+
+* See Also:
+  * [](https://yookassa.ru/developers/api)
+
+---
+### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| category |  | Class |
+| author |  | cms@yoomoney.ru |
 
 ---
 ## Methods
@@ -32,12 +45,12 @@
 #### public factory() : \YooKassa\Model\Payout\AbstractPayoutDestination
 
 ```php
-public factory(string $type) : \YooKassa\Model\Payout\AbstractPayoutDestination
+public factory(string|null $type) : \YooKassa\Model\Payout\AbstractPayoutDestination
 ```
 
 **Summary**
 
-Фабричный метод создания объекта платежных данных по типу
+Фабричный метод создания объекта платежных данных по типу.
 
 **Details:**
 * Inherited From: [\YooKassa\Model\Payout\PayoutDestinationFactory](../classes/YooKassa-Model-Payout-PayoutDestinationFactory.md)
@@ -45,7 +58,7 @@ public factory(string $type) : \YooKassa\Model\Payout\AbstractPayoutDestination
 ##### Parameters:
 | Type | Name | Description |
 | ---- | ---- | ----------- |
-| <code lang="php">string</code> | type  | Тип платежных данных |
+| <code lang="php">string OR null</code> | type  | Тип платежных данных |
 
 **Returns:** \YooKassa\Model\Payout\AbstractPayoutDestination - 
 
@@ -54,12 +67,12 @@ public factory(string $type) : \YooKassa\Model\Payout\AbstractPayoutDestination
 #### public factoryFromArray() : \YooKassa\Model\Payout\AbstractPayoutDestination
 
 ```php
-public factoryFromArray(array $data, string|null $type = null) : \YooKassa\Model\Payout\AbstractPayoutDestination
+public factoryFromArray(array $data, null|string $type = null) : \YooKassa\Model\Payout\AbstractPayoutDestination
 ```
 
 **Summary**
 
-Фабричный метод создания объекта платежных данных из массива
+Фабричный метод создания объекта платежных данных из массива.
 
 **Details:**
 * Inherited From: [\YooKassa\Model\Payout\PayoutDestinationFactory](../classes/YooKassa-Model-Payout-PayoutDestinationFactory.md)
@@ -68,7 +81,7 @@ public factoryFromArray(array $data, string|null $type = null) : \YooKassa\Model
 | Type | Name | Description |
 | ---- | ---- | ----------- |
 | <code lang="php">array</code> | data  | Массив платежных данных |
-| <code lang="php">string OR null</code> | type  | Тип платежных данных |
+| <code lang="php">null OR string</code> | type  | Тип платежных данных |
 
 **Returns:** \YooKassa\Model\Payout\AbstractPayoutDestination - 
 
@@ -85,10 +98,10 @@ public factoryFromArray(array $data, string|null $type = null) : \YooKassa\Model
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

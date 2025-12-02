@@ -5,7 +5,7 @@
 ---
 **Summary:**
 
-Класс сериализатора объектов запросов к API для получения списка возвратов
+Класс сериализатора объектов запросов к API для получения списка возвратов.
 
 
 ---
@@ -16,12 +16,12 @@
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [serialize()](../classes/YooKassa-Request-Receipts-ReceiptsRequestSerializer.md#method_serialize) |  | Сериализует объект запроса к API для дальнейшей его отправки |
+| public | [serialize()](../classes/YooKassa-Request-Receipts-ReceiptsRequestSerializer.md#method_serialize) |  | Сериализует объект запроса к API для дальнейшей его отправки. |
 
 ---
 ### Details
 * File: [lib/Request/Receipts/ReceiptsRequestSerializer.php](../../lib/Request/Receipts/ReceiptsRequestSerializer.php)
-* Package: YooKassa
+* Package: Default
 * Class Hierarchy:
   * \YooKassa\Request\Receipts\ReceiptsRequestSerializer
 
@@ -36,7 +36,7 @@ public serialize(\YooKassa\Request\Receipts\ReceiptsRequestInterface $request) :
 
 **Summary**
 
-Сериализует объект запроса к API для дальнейшей его отправки
+Сериализует объект запроса к API для дальнейшей его отправки.
 
 **Details:**
 * Inherited From: [\YooKassa\Request\Receipts\ReceiptsRequestSerializer](../classes/YooKassa-Request-Receipts-ReceiptsRequestSerializer.md)
@@ -61,10 +61,10 @@ public serialize(\YooKassa\Request\Receipts\ReceiptsRequestInterface $request) :
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

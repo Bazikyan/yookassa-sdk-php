@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,22 @@
 
 namespace YooKassa\Common\Exceptions;
 
-class InvalidPropertyException extends \InvalidArgumentException
+use InvalidArgumentException;
+
+class InvalidPropertyException extends InvalidArgumentException
 {
-    /**
-     * @var string
-     */
-    private $propertyName;
+    private string $propertyName;
 
     /**
      * InvalidValueException constructor.
-     * @param string $message
-     * @param int $code
-     * @param string $property
      */
-    public function __construct($message = "", $code = 0, $property = "")
+    public function __construct(string $message = '', int $code = 0, string $property = '')
     {
         parent::__construct($message, $code);
-        $this->propertyName = (string)$property;
+        $this->propertyName = (string) $property;
     }
 
-    /**
-     * @return string
-     */
-    public function getProperty()
+    public function getProperty(): string
     {
         return $this->propertyName;
     }

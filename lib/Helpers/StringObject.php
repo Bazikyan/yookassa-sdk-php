@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,31 +27,36 @@
 namespace YooKassa\Helpers;
 
 /**
- * Класс объекта, кастящегося в строку, используется только в тестах
+ * Класс, представляющий модель StringObject.
  *
- * @package YooKassa
+ * Класс объекта, преобразуемого в строку, используется только в тестах.
+ *
+ * @category Class
+ * @package  YooKassa\Helpers
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  */
 class StringObject
 {
     /**
      * @var string Значение, возвращаемое методом __toString
      */
-    private $value;
+    private string $value;
 
     /**
      * StringObject constructor.
-     * @param string $value
      */
-    public function __construct($value)
+    public function __construct(string $value)
     {
-        $this->value = (string)$value;
+        $this->value = $value;
     }
 
     /**
-     * Возвращает строковое значение текущего объекта
+     * Возвращает строковое значение текущего объекта.
+     *
      * @return string Строковое представление объекта
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->value;
     }

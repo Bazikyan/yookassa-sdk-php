@@ -1,123 +1,121 @@
 <?php
 
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
+
 namespace Tests\YooKassa\Model\Payout;
 
-use YooKassa\Helpers\Random;
+use Exception;
+use Tests\YooKassa\AbstractTestCase;
+use Datetime;
+use YooKassa\Model\Metadata;
 use YooKassa\Model\Payout\PayoutDestinationBankCard;
-use YooKassa\Model\Payout\PayoutDestinationBankCardCard;
-use YooKassa\Model\PaymentMethodType;
 
-class PayoutDestinationBankCardTest extends AbstractPayoutDestinationTest
+/**
+ * PayoutDestinationBankCardTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
+class PayoutDestinationBankCardTest extends AbstractTestCase
 {
+    protected PayoutDestinationBankCard $object;
+
     /**
      * @return PayoutDestinationBankCard
      */
-    protected function getTestInstance()
+    protected function getTestInstance(): PayoutDestinationBankCard
     {
         return new PayoutDestinationBankCard();
     }
 
     /**
-     * @return string
+     * @return void
      */
-    protected function getExpectedType()
+    public function testPayoutDestinationBankCardClassExists(): void
     {
-        return PaymentMethodType::BANK_CARD;
+        $this->object = $this->getMockBuilder(PayoutDestinationBankCard::class)->getMockForAbstractClass();
+        $this->assertTrue(class_exists(PayoutDestinationBankCard::class));
+        $this->assertInstanceOf(PayoutDestinationBankCard::class, $this->object);
     }
 
     /**
+     * Test property "card"
      * @dataProvider validCardDataProvider
-     * @param PayoutDestinationBankCardCard $value
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
      */
-    public function testGetSetBankCard($value)
+    public function testCard(mixed $value): void
     {
         $instance = $this->getTestInstance();
-
-        self::assertNull($instance->getCard());
-        self::assertNull($instance->card);
-
+        self::assertEmpty($instance->getCard());
+        self::assertEmpty($instance->card);
         $instance->setCard($value);
-        if ($value === null || $value === '' || $value === array()) {
-            self::assertNull($instance->getCard());
-            self::assertNull($instance->card);
-        } else {
-            if (is_array($value)) {
-                $expected = new PayoutDestinationBankCardCard();
-                foreach ($value as $property => $val) {
-                    $expected->offsetSet($property, $val);
-                }
-            } else {
-                $expected = $value;
-            }
-            self::assertEquals($expected, $instance->getCard());
-            self::assertEquals($expected, $instance->card);
+        self::assertEquals($value, is_array($value) ? $instance->getCard()->toArray() : $instance->getCard());
+        self::assertEquals($value, is_array($value) ? $instance->card->toArray() : $instance->card);
+        if (!empty($value)) {
+            self::assertNotNull($instance->getCard());
+            self::assertNotNull($instance->card);
         }
+    }
 
+    /**
+     * Test invalid property "card"
+     * @dataProvider invalidCardDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidCard(mixed $value, string $exceptionClass): void
+    {
         $instance = $this->getTestInstance();
-        $instance->card = $value;
-        if ($value === null || $value === '' || $value === array()) {
-            self::assertNull($instance->getCard());
-            self::assertNull($instance->card);
-        } else {
-            if (is_array($value)) {
-                $expected = new PayoutDestinationBankCardCard();
-                foreach ($value as $property => $val) {
-                    $expected->offsetSet($property, $val);
-                }
-            } else {
-                $expected = $value;
-            }
-            self::assertEquals($expected, $instance->getCard());
-            self::assertEquals($expected, $instance->card);
-        }
+
+        $this->expectException($exceptionClass);
+        $instance->setCard($value);
     }
 
     /**
-     * @dataProvider invalidCardDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
+     * @return array[]
+     * @throws Exception
      */
-    public function testSetInvalidCard($value)
+    public function validCardDataProvider(): array
     {
-        $this->getTestInstance()->setCard($value);
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_card'));
     }
 
     /**
-     * @dataProvider invalidCardDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
+     * @return array[]
+     * @throws Exception
      */
-    public function testSetterInvalidCard($value)
+    public function invalidCardDataProvider(): array
     {
-        $this->getTestInstance()->card = $value;
-    }
-
-    public function validCardDataProvider()
-    {
-        return array(
-            array(null),
-            array(new PayoutDestinationBankCardCard()),
-            array(array()),
-            array(''),
-            array(array(
-                'first6' => Random::str(6, '0123456789'),
-                'last4' => Random::str(4, '0123456789'),
-                'card_type' => 'Visa',
-                'issuer_country' => 'RU',
-                'issuer_name' => 'SberBank',
-            )),
-        );
-    }
-
-    public function invalidCardDataProvider()
-    {
-        return array(
-            array(0),
-            array(1),
-            array(-1),
-            array('5'),
-            array(true),
-            array(new \stdClass()),
-        );
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_card'));
     }
 }

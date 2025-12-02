@@ -5,20 +5,23 @@
 ---
 **Summary:**
 
-Базовый класс генерируемых enum'ов
+Класс, представляющий модель HttpVerb.
 
+**Description:**
+
+Список доступных методов HTTP запроса.
 
 ---
 ### Constants
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [GET](../classes/YooKassa-Common-HttpVerb.md#constant_GET) |  |  |
-| public | [POST](../classes/YooKassa-Common-HttpVerb.md#constant_POST) |  |  |
-| public | [PATCH](../classes/YooKassa-Common-HttpVerb.md#constant_PATCH) |  |  |
-| public | [HEAD](../classes/YooKassa-Common-HttpVerb.md#constant_HEAD) |  |  |
-| public | [OPTIONS](../classes/YooKassa-Common-HttpVerb.md#constant_OPTIONS) |  |  |
-| public | [PUT](../classes/YooKassa-Common-HttpVerb.md#constant_PUT) |  |  |
-| public | [DELETE](../classes/YooKassa-Common-HttpVerb.md#constant_DELETE) |  |  |
+| public | [GET](../classes/YooKassa-Common-HttpVerb.md#constant_GET) |  | Http метод GET |
+| public | [POST](../classes/YooKassa-Common-HttpVerb.md#constant_POST) |  | Http метод POST |
+| public | [PATCH](../classes/YooKassa-Common-HttpVerb.md#constant_PATCH) |  | Http метод PATCH |
+| public | [HEAD](../classes/YooKassa-Common-HttpVerb.md#constant_HEAD) |  | Http метод HEAD |
+| public | [OPTIONS](../classes/YooKassa-Common-HttpVerb.md#constant_OPTIONS) |  | Http метод OPTIONS |
+| public | [PUT](../classes/YooKassa-Common-HttpVerb.md#constant_PUT) |  | Http метод PUT |
+| public | [DELETE](../classes/YooKassa-Common-HttpVerb.md#constant_DELETE) |  | Http метод DELETE |
 
 ---
 ### Properties
@@ -30,22 +33,34 @@
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [getEnabledValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getEnabledValues) |  | Возвращает значения в enum'е значения которых разрешены |
-| public | [getValidValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getValidValues) |  | Возвращает все значения в enum'e |
-| public | [valueExists()](../classes/YooKassa-Common-AbstractEnum.md#method_valueExists) |  | Проверяет наличие значения в enum'e |
+| public | [getEnabledValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getEnabledValues) |  | Возвращает значения в enum'е значения которых разрешены. |
+| public | [getValidValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getValidValues) |  | Возвращает все значения в enum'e. |
+| public | [valueExists()](../classes/YooKassa-Common-AbstractEnum.md#method_valueExists) |  | Проверяет наличие значения в enum'e. |
 
 ---
 ### Details
 * File: [lib/Common/HttpVerb.php](../../lib/Common/HttpVerb.php)
-* Package: Default
+* Package: YooKassa
 * Class Hierarchy: 
   * [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
   * \YooKassa\Common\HttpVerb
+
+* See Also:
+  * [](https://yookassa.ru/developers/api)
+
+---
+### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| category |  | Class |
+| author |  | cms@yoomoney.ru |
 
 ---
 ## Constants
 <a name="constant_GET" class="anchor"></a>
 ###### GET
+Http метод GET
+
 ```php
 GET = 'GET'
 ```
@@ -53,6 +68,8 @@ GET = 'GET'
 
 <a name="constant_POST" class="anchor"></a>
 ###### POST
+Http метод POST
+
 ```php
 POST = 'POST'
 ```
@@ -60,6 +77,8 @@ POST = 'POST'
 
 <a name="constant_PATCH" class="anchor"></a>
 ###### PATCH
+Http метод PATCH
+
 ```php
 PATCH = 'PATCH'
 ```
@@ -67,6 +86,8 @@ PATCH = 'PATCH'
 
 <a name="constant_HEAD" class="anchor"></a>
 ###### HEAD
+Http метод HEAD
+
 ```php
 HEAD = 'HEAD'
 ```
@@ -74,6 +95,8 @@ HEAD = 'HEAD'
 
 <a name="constant_OPTIONS" class="anchor"></a>
 ###### OPTIONS
+Http метод OPTIONS
+
 ```php
 OPTIONS = 'OPTIONS'
 ```
@@ -81,6 +104,8 @@ OPTIONS = 'OPTIONS'
 
 <a name="constant_PUT" class="anchor"></a>
 ###### PUT
+Http метод PUT
+
 ```php
 PUT = 'PUT'
 ```
@@ -88,6 +113,8 @@ PUT = 'PUT'
 
 <a name="constant_DELETE" class="anchor"></a>
 ###### DELETE
+Http метод DELETE
+
 ```php
 DELETE = 'DELETE'
 ```
@@ -116,7 +143,7 @@ Static public getEnabledValues() : string[]
 
 **Summary**
 
-Возвращает значения в enum'е значения которых разрешены
+Возвращает значения в enum'е значения которых разрешены.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -133,7 +160,7 @@ Static public getValidValues() : array
 
 **Summary**
 
-Возвращает все значения в enum'e
+Возвращает все значения в enum'e.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -150,7 +177,7 @@ Static public valueExists(mixed $value) : bool
 
 **Summary**
 
-Проверяет наличие значения в enum'e
+Проверяет наличие значения в enum'e.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -175,10 +202,10 @@ Static public valueExists(mixed $value) : bool
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

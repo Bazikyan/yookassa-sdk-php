@@ -1,131 +1,136 @@
 <?php
 
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2024 "YooMoney", NBСO LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 namespace Tests\YooKassa\Model\Deal;
 
-use PHPUnit\Framework\TestCase;
-use YooKassa\Helpers\Random;
+use Exception;
+use Tests\YooKassa\AbstractTestCase;
+use Datetime;
+use YooKassa\Model\Metadata;
 use YooKassa\Model\Deal\CaptureDealData;
-use YooKassa\Model\Deal\SettlementPayoutPayment;
-use YooKassa\Model\Deal\SettlementPayoutPaymentType;
 
-class CaptureDealDataTest extends TestCase
+/**
+ * CaptureDealDataTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
+class CaptureDealDataTest extends AbstractTestCase
 {
+    protected CaptureDealData $object;
 
     /**
-     * @dataProvider fromArrayDataProvider
-     * @param array $source
-     * @param CaptureDealData $expected
+     * @return CaptureDealData
      */
-    public function testFromArray($source, $expected)
+    protected function getTestInstance(): CaptureDealData
     {
-        $deal = new CaptureDealData($source);
-        $dealArray = $expected->toArray();
+        return new CaptureDealData();
+    }
 
-        if (!empty($deal)) {
-            foreach ($deal->toArray() as $property => $value) {
-                self::assertEquals($value, $dealArray[$property]);
+    /**
+     * @return void
+     */
+    public function testPaymentCaptureRequestDealClassExists(): void
+    {
+        $this->object = $this->getMockBuilder(CaptureDealData::class)->getMockForAbstractClass();
+        $this->assertTrue(class_exists(CaptureDealData::class));
+        $this->assertInstanceOf(CaptureDealData::class, $this->object);
+    }
+
+    /**
+     * Test property "settlements"
+     * @dataProvider validSettlementsDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testSettlements(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertIsObject($instance->getSettlements());
+        self::assertIsObject($instance->settlements);
+        self::assertCount(0, $instance->getSettlements());
+        self::assertCount(0, $instance->settlements);
+        $instance->setSettlements($value);
+        self::assertNotNull($instance->getSettlements());
+        self::assertNotNull($instance->settlements);
+        foreach ($value as $key => $element) {
+            if (is_array($element) && !empty($element)) {
+                self::assertEquals($element, $instance->getSettlements()[$key]->toArray());
+                self::assertEquals($element, $instance->settlements[$key]->toArray());
+                self::assertIsArray($instance->getSettlements()[$key]->toArray());
+                self::assertIsArray($instance->settlements[$key]->toArray());
+            }
+            if (is_object($element) && !empty($element)) {
+                self::assertEquals($element, $instance->getSettlements()->get($key));
+                self::assertIsObject($instance->getSettlements()->get($key));
+                self::assertIsObject($instance->settlements->get($key));
+                self::assertIsObject($instance->getSettlements());
+                self::assertIsObject($instance->settlements);
             }
         }
+        self::assertCount(count($value), $instance->getSettlements());
+        self::assertCount(count($value), $instance->settlements);
     }
 
-    public function validDataProvider()
+    /**
+     * Test invalid property "settlements"
+     * @dataProvider invalidSettlementsDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidSettlements(mixed $value, string $exceptionClass): void
     {
-        $result = array();
-        for ($i = 0; $i < 10; $i++) {
-            $payment = array(
-                'settlements' => $this->generateSettlements(),
-            );
-            $result[] = array($payment);
-        }
-        return $result;
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setSettlements($value);
     }
 
-    public function invalidDataProvider()
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validSettlementsDataProvider(): array
     {
-        $result = array(
-            array(
-                array(
-                    'settlements' => null,
-                )
-            ),
-            array(
-                array(
-                    'settlements' => '',
-                ),
-            ),
-        );
-        $invalidData = array(
-            array(null),
-            array(''),
-            array(new \stdClass()),
-            array('invalid_value'),
-            array(0),
-            array(3234),
-            array(true),
-            array(false),
-            array(0.43),
-        );
-        for ($i = 0; $i < 9; $i++) {
-            $payment = array(
-                'settlements' => Random::value($invalidData),
-            );
-            $result[] = array($payment);
-        }
-        return $result;
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_settlements'));
     }
 
-    public function fromArrayDataProvider()
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidSettlementsDataProvider(): array
     {
-        $deal = new CaptureDealData();
-        $settlements = array();
-        $settlements[] = new SettlementPayoutPayment(array(
-            'type' => SettlementPayoutPaymentType::PAYOUT,
-            'amount' => array(
-                'value' => 123.00,
-                'currency' => 'RUB',
-            ),
-        ));
-        $deal->setSettlements($settlements);
-
-        return array(
-            array(
-                array(
-                    'settlements' => array(
-                        array(
-                            'type' => SettlementPayoutPaymentType::PAYOUT,
-                            'amount' => array(
-                                'value' => 123.00,
-                                'currency' => 'RUB',
-                            ),
-                        )
-                    ),
-                ),
-                $deal
-            ),
-        );
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_settlements'));
     }
-
-    private function generateSettlements()
-    {
-        $return = array();
-        $count = Random::int(1, 10);
-
-        for ($i=0; $i < $count; $i++) {
-            $return[] = $this->generateSettlement();
-        }
-
-        return $return;
-    }
-
-    private function generateSettlement()
-    {
-        return array(
-            'type' => Random::value(SettlementPayoutPaymentType::getValidValues()),
-            'amount' => array(
-                'value' => round(Random::float(1.00, 100.00), 2),
-                'currency' => 'RUB',
-            ),
-        );
-    }
-
 }

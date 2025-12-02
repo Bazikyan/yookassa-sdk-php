@@ -1,639 +1,589 @@
 <?php
 
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
+
 namespace Tests\YooKassa\Request\Refunds;
 
-use PHPUnit\Framework\TestCase;
-use YooKassa\Helpers\Random;
-use YooKassa\Helpers\StringObject;
-use YooKassa\Model\RefundStatus;
+use Exception;
+use Tests\YooKassa\AbstractTestCase;
+use Datetime;
+use YooKassa\Common\AbstractRequestBuilder;
+use YooKassa\Model\Metadata;
 use YooKassa\Request\Refunds\RefundsRequest;
-use YooKassa\Request\Refunds\RefundsRequestBuilder;
 
-class RefundsRequestTest extends TestCase
+/**
+ * DealsRequestTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
+class RefundsRequestTest extends AbstractTestCase
 {
+    protected RefundsRequest $object;
+
     /**
-     * @dataProvider validDataProvider
-     * @param $options
+     * @param mixed|null $value
+     * @return RefundsRequest
      */
-    public function testPaymentId($options)
+    protected function getTestInstance(mixed $value = null): RefundsRequest
     {
-        $instance = new RefundsRequest();
+        return new RefundsRequest($value);
+    }
 
-        self::assertFalse($instance->hasPaymentId());
-        self::assertNull($instance->getPaymentId());
-        self::assertNull($instance->paymentId);
+    /**
+     * @return void
+     */
+    public function testRefundsRequestClassExists(): void
+    {
+        $this->object = $this->getMockBuilder(RefundsRequest::class)->getMockForAbstractClass();
+        $this->assertTrue(class_exists(RefundsRequest::class));
+        $this->assertInstanceOf(RefundsRequest::class, $this->object);
+        self::assertTrue($this->object->validate());
+    }
 
-        $instance->setPaymentId($options['payment_id']);
-        if (empty($options['payment_id'])) {
-            self::assertFalse($instance->hasPaymentId());
-            self::assertNull($instance->getPaymentId());
-            self::assertNull($instance->paymentId);
-        } else {
+    /**
+     * Test property "payment_id"
+     * @dataProvider validPaymentIdDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testPaymentId(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertEmpty($instance->getPaymentId());
+        self::assertEmpty($instance->payment_id);
+        $instance->setPaymentId($value);
+        self::assertEquals($value, is_array($value) ? $instance->getPaymentId()->toArray() : $instance->getPaymentId());
+        self::assertEquals($value, is_array($value) ? $instance->payment_id->toArray() : $instance->payment_id);
+        if (!empty($value)) {
             self::assertTrue($instance->hasPaymentId());
-            self::assertEquals($options['payment_id'], $instance->getPaymentId());
-            self::assertEquals($options['payment_id'], $instance->paymentId);
-        }
-
-        $instance->setPaymentId('');
-        self::assertFalse($instance->hasPaymentId());
-        self::assertNull($instance->getPaymentId());
-        self::assertNull($instance->paymentId);
-
-        $instance->paymentId = $options['payment_id'];
-        if (empty($options['payment_id'])) {
-            self::assertFalse($instance->hasPaymentId());
-            self::assertNull($instance->getPaymentId());
-            self::assertNull($instance->paymentId);
-        } else {
-            self::assertTrue($instance->hasPaymentId());
-            self::assertEquals($options['payment_id'], $instance->getPaymentId());
-            self::assertEquals($options['payment_id'], $instance->paymentId);
+            self::assertLessThanOrEqual(36, is_string($instance->getPaymentId()) ? mb_strlen($instance->getPaymentId()) : $instance->getPaymentId());
+            self::assertLessThanOrEqual(36, is_string($instance->payment_id) ? mb_strlen($instance->payment_id) : $instance->payment_id);
+            self::assertGreaterThanOrEqual(36, is_string($instance->getPaymentId()) ? mb_strlen($instance->getPaymentId()) : $instance->getPaymentId());
+            self::assertGreaterThanOrEqual(36, is_string($instance->payment_id) ? mb_strlen($instance->payment_id) : $instance->payment_id);
         }
     }
 
     /**
+     * Test invalid property "payment_id"
      * @dataProvider invalidPaymentIdDataProvider
-     * @expectedException \InvalidArgumentException
      * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
      */
-    public function testSetInvalidPaymentId($value)
+    public function testInvalidPaymentId(mixed $value, string $exceptionClass): void
     {
-        $instance = new RefundsRequest();
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
         $instance->setPaymentId($value);
     }
 
     /**
-     * @dataProvider invalidPaymentIdDataProvider
-     * @expectedException \InvalidArgumentException
+     * @return array[]
+     * @throws Exception
+     */
+    public function validPaymentIdDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_paymentId'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidPaymentIdDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_paymentId'));
+    }
+
+    /**
+     * Test property "cursor"
+     * @dataProvider validCursorDataProvider
      * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
      */
-    public function testSetterInvalidPaymentId($value)
+    public function testCursor(mixed $value): void
     {
-        $instance = new RefundsRequest();
-        $instance->paymentId = $value;
-    }
-
-    /**
-     * @return array
-     */
-    public function validStringDataProvider()
-    {
-        return array(
-            array(array()),
-            array(true),
-            array(false),
-            array(new \stdClass()),
-        );
-    }
-
-    /**
-     * @dataProvider validDataProvider
-     * @param $options
-     */
-    public function testCreateGte($options)
-    {
-        $instance = new RefundsRequest();
-
-        self::assertFalse($instance->hasCreatedAtGte());
-        self::assertNull($instance->getCreatedAtGte());
-        self::assertNull($instance->createdAtGte);
-
-        $instance->setCreatedAtGte($options['created_at_gte']);
-        if (empty($options['created_at_gte'])) {
-            self::assertFalse($instance->hasCreatedAtGte());
-            self::assertNull($instance->getCreatedAtGte());
-            self::assertNull($instance->createdAtGte);
-        } else {
-            self::assertTrue($instance->hasCreatedAtGte());
-            self::assertEquals($options['created_at_gte'], $instance->getCreatedAtGte()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_gte'], $instance->createdAtGte->format(YOOKASSA_DATE));
-        }
-
-        $instance->setCreatedAtGte('');
-        self::assertFalse($instance->hasCreatedAtGte());
-        self::assertNull($instance->getCreatedAtGte());
-        self::assertNull($instance->createdAtGte);
-
-        $instance->createdAtGte = $options['created_at_gte'];
-        if (empty($options['created_at_gte'])) {
-            self::assertFalse($instance->hasCreatedAtGte());
-            self::assertNull($instance->getCreatedAtGte());
-            self::assertNull($instance->createdAtGte);
-        } else {
-            self::assertTrue($instance->hasCreatedAtGte());
-            self::assertEquals($options['created_at_gte'], $instance->getCreatedAtGte()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_gte'], $instance->createdAtGte->format(YOOKASSA_DATE));
-        }
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetInvalidCreatedGte($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->setCreatedAtGte($value);
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetterInvalidCreatedGte($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->createdAtGte = $value;
-    }
-
-    /**
-     * @dataProvider validDataProvider
-     * @param $options
-     */
-    public function testCreateGt($options)
-    {
-        $instance = new RefundsRequest();
-
-        self::assertFalse($instance->hasCreatedAtGt());
-        self::assertNull($instance->getCreatedAtGt());
-        self::assertNull($instance->createdAtGt);
-
-        $instance->setCreatedAtGt($options['created_at_gt']);
-        if (empty($options['created_at_gt'])) {
-            self::assertFalse($instance->hasCreatedAtGte());
-            self::assertNull($instance->getCreatedAtGte());
-            self::assertNull($instance->createdAtGte);
-        } else {
-            self::assertTrue($instance->hasCreatedAtGt());
-            self::assertEquals($options['created_at_gt'], $instance->getCreatedAtGt()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_gt'], $instance->createdAtGt->format(YOOKASSA_DATE));
-        }
-
-        $instance->setCreatedAtGt('');
-        self::assertFalse($instance->hasCreatedAtGt());
-        self::assertNull($instance->getCreatedAtGt());
-        self::assertNull($instance->createdAtGt);
-
-        $instance->createdAtGt = $options['created_at_gt'];
-        if (empty($options['created_at_gt'])) {
-            self::assertFalse($instance->hasCreatedAtGt());
-            self::assertNull($instance->getCreatedAtGt());
-            self::assertNull($instance->createdAtGt);
-        } else {
-            self::assertTrue($instance->hasCreatedAtGt());
-            self::assertEquals($options['created_at_gt'], $instance->getCreatedAtGt()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_gt'], $instance->createdAtGt->format(YOOKASSA_DATE));
-        }
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetInvalidCreatedGt($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->setCreatedAtGt($value);
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetterInvalidCreatedGt($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->createdAtGt = $value;
-    }
-
-    /**
-     * @dataProvider validDataProvider
-     * @param $options
-     */
-    public function testCreateLte($options)
-    {
-        $instance = new RefundsRequest();
-
-        self::assertFalse($instance->hasCreatedAtLte());
-        self::assertNull($instance->getCreatedAtLte());
-        self::assertNull($instance->createdAtLte);
-
-        $instance->setCreatedAtLte($options['created_at_lte']);
-        if (empty($options['created_at_lte'])) {
-            self::assertFalse($instance->hasCreatedAtLte());
-            self::assertNull($instance->getCreatedAtLte());
-            self::assertNull($instance->createdAtLte);
-        } else {
-            self::assertTrue($instance->hasCreatedAtLte());
-            self::assertEquals($options['created_at_lte'], $instance->getCreatedAtLte()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_lte'], $instance->createdAtLte->format(YOOKASSA_DATE));
-        }
-
-        $instance->setCreatedAtLte('');
-        self::assertFalse($instance->hasCreatedAtLte());
-        self::assertNull($instance->getCreatedAtLte());
-        self::assertNull($instance->createdAtLte);
-
-        $instance->createdAtLte = $options['created_at_lte'];
-        if (empty($options['created_at_lte'])) {
-            self::assertFalse($instance->hasCreatedAtLte());
-            self::assertNull($instance->getCreatedAtLte());
-            self::assertNull($instance->createdAtLte);
-        } else {
-            self::assertTrue($instance->hasCreatedAtLte());
-            self::assertEquals($options['created_at_lte'], $instance->getCreatedAtLte()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_lte'], $instance->createdAtLte->format(YOOKASSA_DATE));
-        }
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetInvalidCreatedLte($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->setCreatedAtLte($value);
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetterInvalidCreatedLte($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->createdAtLte = $value;
-    }
-
-    /**
-     * @dataProvider validDataProvider
-     * @param $options
-     */
-    public function testCreateLt($options)
-    {
-        $instance = new RefundsRequest();
-
-        self::assertFalse($instance->hasCreatedAtLt());
-        self::assertNull($instance->getCreatedAtLt());
-        self::assertNull($instance->createdAtLt);
-
-        $instance->setCreatedAtLt($options['created_at_lt']);
-        if (empty($options['created_at_lt'])) {
-            self::assertFalse($instance->hasCreatedAtLt());
-            self::assertNull($instance->getCreatedAtLt());
-            self::assertNull($instance->createdAtLt);
-        } else {
-            self::assertTrue($instance->hasCreatedAtLt());
-            self::assertEquals($options['created_at_lt'], $instance->getCreatedAtLt()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_lt'], $instance->createdAtLt->format(YOOKASSA_DATE));
-        }
-
-        $instance->setCreatedAtLt('');
-        self::assertFalse($instance->hasCreatedAtLt());
-        self::assertNull($instance->getCreatedAtLt());
-        self::assertNull($instance->createdAtLt);
-
-        $instance->createdAtLt = $options['created_at_lt'];
-        if (empty($options['created_at_lt'])) {
-            self::assertFalse($instance->hasCreatedAtLt());
-            self::assertNull($instance->getCreatedAtLt());
-            self::assertNull($instance->createdAtLt);
-        } else {
-            self::assertTrue($instance->hasCreatedAtLt());
-            self::assertEquals($options['created_at_lt'], $instance->getCreatedAtLt()->format(YOOKASSA_DATE));
-            self::assertEquals($options['created_at_lt'], $instance->createdAtLt->format(YOOKASSA_DATE));
-        }
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetInvalidCreatedLt($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->setCreatedAtLt($value);
-    }
-
-    /**
-     * @dataProvider invalidDateDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
-     */
-    public function testSetterInvalidCreatedLt($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->createdAtLt = $value;
-    }
-
-    /**
-     * @dataProvider validDataProvider
-     * @param $options
-     */
-    public function testStatus($options)
-    {
-        $instance = new RefundsRequest();
-
-        self::assertFalse($instance->hasStatus());
-        self::assertNull($instance->getStatus());
-        self::assertNull($instance->status);
-
-        $instance->setStatus($options['status']);
-        if (empty($options['status'])) {
-            self::assertFalse($instance->hasStatus());
-            self::assertNull($instance->getStatus());
-            self::assertNull($instance->status);
-        } else {
-            self::assertTrue($instance->hasStatus());
-            self::assertEquals($options['status'], $instance->getStatus());
-            self::assertEquals($options['status'], $instance->status);
-        }
-
-        $instance->setStatus('');
-        self::assertFalse($instance->hasStatus());
-        self::assertNull($instance->getStatus());
-        self::assertNull($instance->status);
-
-        $instance->status = $options['status'];
-        if (empty($options['status'])) {
-            self::assertFalse($instance->hasStatus());
-            self::assertNull($instance->getStatus());
-            self::assertNull($instance->status);
-        } else {
-            self::assertTrue($instance->hasStatus());
-            self::assertEquals($options['status'], $instance->getStatus());
-            self::assertEquals($options['status'], $instance->status);
-        }
-    }
-
-    /**
-     * @dataProvider invalidStatusDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param $value
-     */
-    public function testSetInvalidStatus($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->setStatus($value);
-    }
-
-    /**
-     * @dataProvider invalidStatusDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param $value
-     */
-    public function testSetterInvalidStatus($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->status = $value;
-        self::assertEquals($value, $instance->status);
-    }
-
-    /**
-     * @dataProvider validLimitDataProvider
-     * @param $value
-     */
-    public function testLimit($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->limit = $value;
-        self::assertEquals($value, $instance->limit);
-    }
-
-    /**
-     * @dataProvider invalidLimitDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param $value
-     */
-    public function testSetInvalidLimit($value)
-    {
-        $instance = new RefundsRequest();
-        $instance->setLimit($value);
-    }
-
-
-    /**
-     * @dataProvider validDataProvider
-     * @param $options
-     */
-    public function testCursor($options)
-    {
-        $instance = new RefundsRequest();
-
-        self::assertFalse($instance->hasCursor());
-        self::assertNull($instance->getCursor());
-        self::assertNull($instance->cursor);
-
-        $instance->setCursor($options['cursor']);
-        if (empty($options['cursor'])) {
-            self::assertFalse($instance->hasCursor());
-            self::assertNull($instance->getCursor());
-            self::assertNull($instance->cursor);
-        } else {
+        $instance = $this->getTestInstance();
+        self::assertEmpty($instance->getCursor());
+        self::assertEmpty($instance->cursor);
+        $instance->setCursor($value);
+        self::assertEquals($value, is_array($value) ? $instance->getCursor()->toArray() : $instance->getCursor());
+        self::assertEquals($value, is_array($value) ? $instance->cursor->toArray() : $instance->cursor);
+        if (!empty($value)) {
             self::assertTrue($instance->hasCursor());
-            self::assertEquals($options['cursor'], $instance->getCursor());
-            self::assertEquals($options['cursor'], $instance->cursor);
-        }
-
-        $instance->setCursor('');
-        self::assertFalse($instance->hasCursor());
-        self::assertNull($instance->getCursor());
-        self::assertNull($instance->cursor);
-
-        $instance->cursor = $options['cursor'];
-        if (empty($options['cursor'])) {
-            self::assertFalse($instance->hasCursor());
-            self::assertNull($instance->getCursor());
-            self::assertNull($instance->cursor);
-        } else {
-            self::assertTrue($instance->hasCursor());
-            self::assertEquals($options['cursor'], $instance->getCursor());
-            self::assertEquals($options['cursor'], $instance->cursor);
+            self::assertNotNull($instance->getCursor());
+            self::assertNotNull($instance->cursor);
         }
     }
 
     /**
-     * @dataProvider invalidNextCursorDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param $value
+     * Test invalid property "cursor"
+     * @dataProvider invalidCursorDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
      */
-    public function testSetInvalidCursor($value)
+    public function testInvalidCursor(mixed $value, string $exceptionClass): void
     {
-        $instance = new RefundsRequest();
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
         $instance->setCursor($value);
     }
 
     /**
-     * @dataProvider invalidNextCursorDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param $value
+     * @return array[]
+     * @throws Exception
      */
-    public function testSetterInvalidCursor($value)
+    public function validCursorDataProvider(): array
     {
-        $instance = new RefundsRequest();
-        $instance->cursor = $value;
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_cursor'));
     }
 
-    public function testValidate()
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidCursorDataProvider(): array
     {
-        $instance = new RefundsRequest();
-
-        self::assertTrue($instance->validate());
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_cursor'));
     }
 
-    public function testBuilder()
+    /**
+     * Test property "limit"
+     * @dataProvider validLimitDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testLimit(mixed $value): void
     {
-        $builder = RefundsRequest::builder();
-        self::assertTrue($builder instanceof RefundsRequestBuilder);
-    }
-
-    public function validDataProvider()
-    {
-        $result = array(
-            array(
-                array(
-                    'created_at_gte' => null,
-                    'created_at_gt' => null,
-                    'created_at_lte' => null,
-                    'created_at_lt' => null,
-                    'status' => null,
-                    'payment_id' => null,
-                    'limit' => null,
-                    'cursor' => null,
-                ),
-            ),
-            array(
-                array(
-                    'created_at_gte' => '',
-                    'created_at_gt' => '',
-                    'created_at_lte' => '',
-                    'created_at_lt' => '',
-                    'status' => '',
-                    'payment_id' => '',
-                    'limit' => '',
-                    'cursor' => '',
-                ),
-            ),
-        );
-        $statuses = RefundStatus::getValidValues();
-        for ($i = 0; $i < 10; $i++) {
-            $request = array(
-                'created_at_gte' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                'created_at_gt' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                'created_at_lte' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                'created_at_lt' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                'status' => $statuses[mt_rand(0, count($statuses) - 1)],
-                'payment_id' => $this->randomString(36),
-                'limit' => mt_rand(0, RefundsRequest::MAX_LIMIT_VALUE),
-                'cursor' => uniqid(),
-            );
-            $result[] = array($request);
+        $instance = $this->getTestInstance();
+        $instance->setLimit($value);
+        self::assertEquals($value, is_array($value) ? $instance->getLimit()->toArray() : $instance->getLimit());
+        self::assertEquals($value, is_array($value) ? $instance->limit->toArray() : $instance->limit);
+        if (!empty($value)) {
+            self::assertTrue($instance->hasLimit());
+            self::assertNotNull($instance->getLimit());
+            self::assertNotNull($instance->limit);
+            self::assertLessThanOrEqual(100, is_string($instance->getLimit()) ? mb_strlen($instance->getLimit()) : $instance->getLimit());
+            self::assertLessThanOrEqual(100, is_string($instance->limit) ? mb_strlen($instance->limit) : $instance->limit);
+            self::assertGreaterThanOrEqual(1, is_string($instance->getLimit()) ? mb_strlen($instance->getLimit()) : $instance->getLimit());
+            self::assertGreaterThanOrEqual(1, is_string($instance->limit) ? mb_strlen($instance->limit) : $instance->limit);
+            self::assertIsNumeric($instance->getLimit());
+            self::assertIsNumeric($instance->limit);
         }
-        return $result;
     }
 
-    public function invalidStatusDataProvider()
+    /**
+     * Test invalid property "limit"
+     * @dataProvider invalidCursorDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidLimit(mixed $value, string $exceptionClass): void
     {
-        return array(
-            array(true),
-            array(false),
-            array(array()),
-            array(new \stdClass()),
-            array(Random::str(1, 10)),
-            array(new StringObject(Random::str(1, 10))),
-        );
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setCursor($value);
     }
 
-    public function validLimitDataProvider()
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validLimitDataProvider(): array
     {
-        return array(
-            array(null),
-            array(Random::int(1, RefundsRequest::MAX_LIMIT_VALUE)),
-        );
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_limit'));
     }
 
-    public function invalidLimitDataProvider()
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidLimitDataProvider(): array
     {
-        return array(
-            array(array()),
-            array(new \stdClass()),
-            array(-1),
-            array(RefundsRequest::MAX_LIMIT_VALUE + 1),
-        );
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_limit'));
     }
 
-    public function invalidDataProvider()
+    /**
+     * Test property "created_at_gte"
+     * @dataProvider validCreatedAtGteDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testCreatedAtGte(mixed $value): void
     {
-        $result = array(
-            array(array()),
-            array(new \stdClass()),
-            array(Random::str(10)),
-            array(Random::bytes(10)),
-            array(-1),
-            array(RefundsRequest::MAX_LIMIT_VALUE + 1),
-        );
-        return $result;
-    }
-
-    public function invalidNextCursorDataProvider()
-    {
-        return array(
-            array(true),
-            array(false),
-            array(array()),
-            array(new \stdClass()),
-        );
-    }
-
-    public function invalidPaymentIdDataProvider()
-    {
-        return array(
-            array(true),
-            array(false),
-            array(array()),
-            array(new \stdClass()),
-            array(Random::str(35)),
-            array(Random::str(37)),
-            array(new StringObject(Random::str(10))),
-        );
-    }
-
-    public function invalidDateDataProvider()
-    {
-        return array(
-            array(true),
-            array(false),
-            array(array()),
-            array(new \stdClass()),
-            array(Random::str(35)),
-            array(Random::str(37)),
-            array(new StringObject(Random::str(10))),
-            array(-123),
-        );
-    }
-
-    private function randomString($length, $any = true)
-    {
-        static $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-+_.';
-
-        $result = '';
-        for ($i = 0; $i < $length; $i++) {
-            if ($any) {
-                $char = chr(mt_rand(32, 126));
+        $instance = $this->getTestInstance();
+        self::assertEmpty($instance->getCreatedAtGte());
+        self::assertEmpty($instance->created_at_gte);
+        $instance->setCreatedAtGte($value);
+        if (!empty($value)) {
+            self::assertTrue($instance->hasCreatedAtGte());
+            self::assertNotNull($instance->getCreatedAtGte());
+            self::assertNotNull($instance->created_at_gte);
+            if ($value instanceof Datetime) {
+                self::assertEquals($value, $instance->getCreatedAtGte());
+                self::assertEquals($value, $instance->created_at_gte);
             } else {
-                $rnd = mt_rand(0, strlen($chars) - 1);
-                $char = substr($chars, $rnd, 1);
+                self::assertEquals(new Datetime($value), $instance->getCreatedAtGte());
+                self::assertEquals(new Datetime($value), $instance->created_at_gte);
             }
-            $result .= $char;
         }
-        return $result;
+    }
+
+    /**
+     * Test invalid property "created_at_gte"
+     * @dataProvider invalidCreatedAtGteDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidCreatedAtGte(mixed $value, string $exceptionClass): void
+    {
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setCreatedAtGte($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validCreatedAtGteDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtGte'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidCreatedAtGteDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtGte'));
+    }
+
+    /**
+     * Test property "created_at_gt"
+     * @dataProvider validCreatedAtGtDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testCreatedAtGt(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertEmpty($instance->getCreatedAtGt());
+        self::assertEmpty($instance->created_at_gt);
+        $instance->setCreatedAtGt($value);
+        if (!empty($value)) {
+            self::assertTrue($instance->hasCreatedAtGt());
+            self::assertNotNull($instance->getCreatedAtGt());
+            self::assertNotNull($instance->created_at_gt);
+            if ($value instanceof Datetime) {
+                self::assertEquals($value, $instance->getCreatedAtGt());
+                self::assertEquals($value, $instance->created_at_gt);
+            } else {
+                self::assertEquals(new Datetime($value), $instance->getCreatedAtGt());
+                self::assertEquals(new Datetime($value), $instance->created_at_gt);
+            }
+        }
+    }
+
+    /**
+     * Test invalid property "created_at_gt"
+     * @dataProvider invalidCreatedAtGtDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidCreatedAtGt(mixed $value, string $exceptionClass): void
+    {
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setCreatedAtGt($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validCreatedAtGtDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtGt'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidCreatedAtGtDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtGt'));
+    }
+
+    /**
+     * Test property "created_at_lte"
+     * @dataProvider validCreatedAtLteDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testCreatedAtLte(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertEmpty($instance->getCreatedAtLte());
+        self::assertEmpty($instance->created_at_lte);
+        $instance->setCreatedAtLte($value);
+        if (!empty($value)) {
+            self::assertTrue($instance->hasCreatedAtLte());
+            self::assertNotNull($instance->getCreatedAtLte());
+            self::assertNotNull($instance->created_at_lte);
+            if ($value instanceof Datetime) {
+                self::assertEquals($value, $instance->getCreatedAtLte());
+                self::assertEquals($value, $instance->created_at_lte);
+            } else {
+                self::assertEquals(new Datetime($value), $instance->getCreatedAtLte());
+                self::assertEquals(new Datetime($value), $instance->created_at_lte);
+            }
+        }
+    }
+
+    /**
+     * Test invalid property "created_at_lte"
+     * @dataProvider invalidCreatedAtLteDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidCreatedAtLte(mixed $value, string $exceptionClass): void
+    {
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setCreatedAtLte($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validCreatedAtLteDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtLte'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidCreatedAtLteDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtLte'));
+    }
+
+    /**
+     * Test property "created_at_lt"
+     * @dataProvider validCreatedAtLtDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testCreatedAtLt(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertEmpty($instance->getCreatedAtLt());
+        self::assertEmpty($instance->created_at_lt);
+        $instance->setCreatedAtLt($value);
+        if (!empty($value)) {
+            self::assertTrue($instance->hasCreatedAtLt());
+            self::assertNotNull($instance->getCreatedAtLt());
+            self::assertNotNull($instance->created_at_lt);
+            if ($value instanceof Datetime) {
+                self::assertEquals($value, $instance->getCreatedAtLt());
+                self::assertEquals($value, $instance->created_at_lt);
+            } else {
+                self::assertEquals(new Datetime($value), $instance->getCreatedAtLt());
+                self::assertEquals(new Datetime($value), $instance->created_at_lt);
+            }
+        }
+    }
+
+    /**
+     * Test invalid property "created_at_lt"
+     * @dataProvider invalidCreatedAtLtDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidCreatedAtLt(mixed $value, string $exceptionClass): void
+    {
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setCreatedAtLt($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validCreatedAtLtDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtLt'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidCreatedAtLtDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_createdAtLt'));
+    }
+
+    /**
+     * Test property "status"
+     * @dataProvider validStatusDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testStatus(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertEmpty($instance->getStatus());
+        self::assertEmpty($instance->status);
+        $instance->setStatus($value);
+        if (!empty($value)) {
+            self::assertTrue($instance->hasStatus());
+            self::assertNotNull($instance->getStatus());
+            self::assertNotNull($instance->status);
+            self::assertEquals($value, is_array($value) ? $instance->getStatus()->toArray() : $instance->getStatus());
+            self::assertEquals($value, is_array($value) ? $instance->status->toArray() : $instance->status);
+            self::assertContains($instance->getStatus(), ['canceled', 'succeeded', 'pending']);
+            self::assertContains($instance->status, ['canceled', 'succeeded', 'pending']);
+        }
+    }
+
+    /**
+     * Test invalid property "status"
+     * @dataProvider invalidStatusDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidStatus(mixed $value, string $exceptionClass): void
+    {
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setStatus($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validStatusDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_status'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidStatusDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_status'));
+    }
+
+    /**
+     * Test valid method "builder"
+     * @dataProvider validClassDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function testBuilder(mixed $value): void
+    {
+        $instance = $this->getTestInstance($value);
+        self::assertInstanceOf(AbstractRequestBuilder::class, $instance::builder());
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function validClassDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return [$this->getValidDataProviderByClass($instance)];
     }
 }

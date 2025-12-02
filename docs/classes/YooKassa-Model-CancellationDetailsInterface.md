@@ -5,7 +5,7 @@
 ---
 **Summary:**
 
-Interface CancellationDetailsInterface
+Interface CancellationDetailsInterface.
 
 ---
 ### Constants
@@ -15,20 +15,20 @@ Interface CancellationDetailsInterface
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [getParty()](../classes/YooKassa-Model-CancellationDetailsInterface.md#method_getParty) |  | Возвращает участника процесса платежа, который принял решение об отмене транзакции |
-| public | [getReason()](../classes/YooKassa-Model-CancellationDetailsInterface.md#method_getReason) |  | Возвращает причину отмены платежа |
+| public | [getParty()](../classes/YooKassa-Model-CancellationDetailsInterface.md#method_getParty) |  | Возвращает участника процесса платежа, который принял решение об отмене транзакции. |
+| public | [getReason()](../classes/YooKassa-Model-CancellationDetailsInterface.md#method_getReason) |  | Возвращает причину отмены платежа. |
 
 ---
 ### Details
 * File: [lib/Model/CancellationDetailsInterface.php](../../lib/Model/CancellationDetailsInterface.php)
-* Package: \YooKassa
+* Package: \Default
 
 ---
 ### Tags
 | Tag | Version | Description |
 | --- | ------- | ----------- |
-| property-read |  | Участник процесса платежа, который принял решение об отмене транзакции. |
-| property-read |  | Причина отмены платежа. |
+| property |  | Участник процесса платежа, который принял решение об отмене транзакции. |
+| property |  | Причина отмены платежа. |
 
 ---
 ## Methods
@@ -41,7 +41,7 @@ public getParty() : string
 
 **Summary**
 
-Возвращает участника процесса платежа, который принял решение об отмене транзакции
+Возвращает участника процесса платежа, который принял решение об отмене транзакции.
 
 **Details:**
 * Inherited From: [\YooKassa\Model\CancellationDetailsInterface](../classes/YooKassa-Model-CancellationDetailsInterface.md)
@@ -58,7 +58,7 @@ public getReason() : string
 
 **Summary**
 
-Возвращает причину отмены платежа
+Возвращает причину отмены платежа.
 
 **Details:**
 * Inherited From: [\YooKassa\Model\CancellationDetailsInterface](../classes/YooKassa-Model-CancellationDetailsInterface.md)
@@ -79,10 +79,10 @@ public getReason() : string
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

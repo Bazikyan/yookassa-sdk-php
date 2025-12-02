@@ -5,8 +5,11 @@
 ---
 **Summary:**
 
-Класс объекта, кастящегося в строку, используется только в тестах
+Класс, представляющий модель StringObject.
 
+**Description:**
+
+Класс объекта, преобразуемого в строку, используется только в тестах.
 
 ---
 ### Constants
@@ -17,14 +20,24 @@
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
 | public | [__construct()](../classes/YooKassa-Helpers-StringObject.md#method___construct) |  | StringObject constructor. |
-| public | [__toString()](../classes/YooKassa-Helpers-StringObject.md#method___toString) |  | Возвращает строковое значение текущего объекта |
+| public | [__toString()](../classes/YooKassa-Helpers-StringObject.md#method___toString) |  | Возвращает строковое значение текущего объекта. |
 
 ---
 ### Details
 * File: [lib/Helpers/StringObject.php](../../lib/Helpers/StringObject.php)
-* Package: YooKassa
+* Package: YooKassa\Helpers
 * Class Hierarchy:
   * \YooKassa\Helpers\StringObject
+
+* See Also:
+  * [](https://yookassa.ru/developers/api)
+
+---
+### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| category |  | Class |
+| author |  | cms@yoomoney.ru |
 
 ---
 ## Methods
@@ -59,7 +72,7 @@ public __toString() : string
 
 **Summary**
 
-Возвращает строковое значение текущего объекта
+Возвращает строковое значение текущего объекта.
 
 **Details:**
 * Inherited From: [\YooKassa\Helpers\StringObject](../classes/YooKassa-Helpers-StringObject.md)
@@ -79,10 +92,10 @@ public __toString() : string
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

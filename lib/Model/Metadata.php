@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,40 +26,42 @@
 
 namespace YooKassa\Model;
 
+use ArrayIterator;
+use Countable;
+use Iterator;
+use IteratorAggregate;
+use ReturnTypeWillChange;
 use YooKassa\Common\AbstractObject;
 
 /**
  * Metadata - Метаданные платежа указанные мерчантом.
  * Мерчант может добавлять произвольные данные к платежам в виде набора пар ключ-значение.
  * Имена ключей уникальны.
- *
  */
-class Metadata extends AbstractObject implements \IteratorAggregate, \Countable
+class Metadata extends AbstractObject implements IteratorAggregate, Countable
 {
     /**
-     * @inheritdoc
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->getUnknownProperties();
     }
 
+    #[ReturnTypeWillChange]
     /**
-     * Возвращает объект ArrayIterator для метаданных
-     * @return \Iterator
+     * Возвращает объект ArrayIterator для метаданных.
      */
-    public function getIterator()
+    public function getIterator(): Iterator
     {
-        return new \ArrayIterator($this->getUnknownProperties());
+        return new ArrayIterator($this->getUnknownProperties());
     }
 
+    #[ReturnTypeWillChange]
     /**
-     * Возвращает количество метаданных
-     * @return int
+     * Возвращает количество метаданных.
      */
-    public function count()
+    public function count(): int
     {
         return count($this->getUnknownProperties());
     }

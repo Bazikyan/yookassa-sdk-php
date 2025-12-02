@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,67 +26,44 @@
 
 namespace YooKassa\Request\Refunds;
 
-use Exception;
-use YooKassa\Model\RefundInterface;
+use YooKassa\Common\ListObject;
+use YooKassa\Common\ListObjectInterface;
+use YooKassa\Model\Refund\RefundInterface;
+use YooKassa\Request\AbstractListResponse;
+use YooKassa\Validator\Constraints as Assert;
 
 /**
- * Класс объекта ответа от API со списком возвратов магазина
+ * Класс, представляющий модель RefundsResponse.
  *
- * @package YooKassa
+ * Класс объекта ответа от API со списком возвратов магазина.
+ *
+ * @category Class
+ * @package  YooKassa\Request
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
+ *
+ * @property RefundInterface[]|ListObjectInterface|null $items Массив возвратов
  */
-class RefundsResponse
+class RefundsResponse extends AbstractListResponse
 {
     /**
-     * @var RefundInterface[] Массив возвратов
+     * @var RefundInterface[]|ListObjectInterface|null Массив возвратов
      */
-    private $items;
+    #[Assert\Valid]
+    #[Assert\AllType(RefundResponse::class)]
+    #[Assert\Type(ListObject::class)]
+    protected ?ListObject $_items = null;
 
     /**
-     * @var string|null Токен следующей страницы
+     * Возвращает список возвратов.
+     *
+     * @return RefundInterface[]|ListObjectInterface Список возвратов
      */
-    private $nextCursor;
-
-    /**
-     * Конструктор, устанавливает свойства объекта из пришедшего из API ассоциативного массива
-     * @param array $options Массив настроек, пришедший от API
-     * @throws Exception
-     */
-    public function __construct(array $options)
+    public function getItems(): ListObjectInterface
     {
-        $this->items = array();
-        foreach ($options['items'] as $item) {
-            $this->items[] = new RefundResponse($item);
+        if($this->_items === null) {
+            $this->_items = new ListObject(RefundResponse::class);
         }
-        if (!empty($options['next_cursor'])) {
-            $this->nextCursor = $options['next_cursor'];
-        }
+        return $this->_items;
     }
-
-    /**
-     * Возвращает список возвратов
-     * @return RefundInterface[] Список возвратов
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * Возвращает токен следующей страницы, если он задан, или null
-     * @return string|null Токен следующей страницы
-     */
-    public function getNextCursor()
-    {
-        return $this->nextCursor;
-    }
-
-    /**
-     * Проверяет имееотся ли в ответе токен следующей страницы
-     * @return bool True если токен следующей страницы есть, false если нет
-     */
-    public function hasNextCursor()
-    {
-        return $this->nextCursor !== null;
-    }
-
 }

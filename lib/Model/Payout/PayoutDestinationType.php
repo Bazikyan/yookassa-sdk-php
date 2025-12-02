@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,19 +27,39 @@
 namespace YooKassa\Model\Payout;
 
 use YooKassa\Common\AbstractEnum;
-use YooKassa\Model\PaymentMethodType;
+use YooKassa\Model\Payment\PaymentMethodType;
 
 /**
- * PayoutDestinationType - Виды выплат
- * |Код|Описание|
- * --- | ---
- * |yoo_money|Выплата в кошелек ЮMoney|
- * |bank_card|Выплата на произвольную банковскую карту|
+ * Класс, представляющий модель PayoutDestinationType.
+ *
+ * Виды выплат. Возможные значения:
+ * - `yoo_money` - Выплата в кошелек ЮMoney
+ * - `bank_card` - Выплата на произвольную банковскую карту
+ * - `sbp` - Выплата через СБП на счет в банке или платежном сервисе
+ *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  */
 class PayoutDestinationType extends AbstractEnum
 {
-    protected static $validValues = array(
+    /** Выплата в кошелек ЮMoney */
+    public const YOO_MONEY = 'yoo_money';
+
+    /** Выплата на произвольную банковскую карту */
+    public const BANK_CARD = 'bank_card';
+
+    /** Выплата через СБП на счет в банке или платежном сервисе */
+    public const SBP = 'sbp';
+
+    /**
+     * Возвращает список доступных значений
+     * @return string[]
+     */
+    protected static array $validValues = [
         PaymentMethodType::YOO_MONEY => true,
         PaymentMethodType::BANK_CARD => true,
-    );
+        PaymentMethodType::SBP => true,
+    ];
 }

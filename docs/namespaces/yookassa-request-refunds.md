@@ -4,27 +4,31 @@
 
 ## Parent: [\YooKassa\Request](../namespaces/yookassa-request.md)
 
+### Namespaces
+
+* [\YooKassa\Request\Refunds\RefundMethodData](../namespaces/yookassa-request-refunds-refundmethoddata.md)
+
 ### Interfaces
 
 | Name | Summary |
 | ---- | ------- |
-| [\YooKassa\Request\Refunds\CreateRefundRequestInterface](../classes/YooKassa-Request-Refunds-CreateRefundRequestInterface.md) | Интерфейс объекта запроса на возврат |
-| [\YooKassa\Request\Refunds\RefundsRequestInterface](../classes/YooKassa-Request-Refunds-RefundsRequestInterface.md) | Интерфейс объекта запроса списка возвратов |
+| [\YooKassa\Request\Refunds\CreateRefundRequestInterface](../classes/YooKassa-Request-Refunds-CreateRefundRequestInterface.md) | Interface CreateRefundRequestInterface |
+| [\YooKassa\Request\Refunds\RefundsRequestInterface](../classes/YooKassa-Request-Refunds-RefundsRequestInterface.md) | Interface RefundsRequestInterface |
 
 ### Classes
 
 | Name | Summary |
 | ---- | ------- |
-| [\YooKassa\Request\Refunds\AbstractRefundResponse](../classes/YooKassa-Request-Refunds-AbstractRefundResponse.md) | Абстрактный класс ответа от API с информацией о возврате |
-| [\YooKassa\Request\Refunds\CreateRefundRequest](../classes/YooKassa-Request-Refunds-CreateRefundRequest.md) | Класс объекта запроса для создания возврата |
-| [\YooKassa\Request\Refunds\CreateRefundRequestBuilder](../classes/YooKassa-Request-Refunds-CreateRefundRequestBuilder.md) | Класс билдера запросов к API на создание возврата средств |
-| [\YooKassa\Request\Refunds\CreateRefundRequestSerializer](../classes/YooKassa-Request-Refunds-CreateRefundRequestSerializer.md) | Класс сериалайзера запросов к API на создание нового возврата средств |
-| [\YooKassa\Request\Refunds\CreateRefundResponse](../classes/YooKassa-Request-Refunds-CreateRefundResponse.md) | Класс объекта ответа от API при создании нового возврата |
-| [\YooKassa\Request\Refunds\RefundResponse](../classes/YooKassa-Request-Refunds-RefundResponse.md) | Класс объекта ответа от API при запросе одного конкретного возврата |
-| [\YooKassa\Request\Refunds\RefundsRequest](../classes/YooKassa-Request-Refunds-RefundsRequest.md) | Класс объекта запроса к API списка возвратов магазина |
-| [\YooKassa\Request\Refunds\RefundsRequestBuilder](../classes/YooKassa-Request-Refunds-RefundsRequestBuilder.md) | Класс билдера объектов запросов к API списка возвратов |
-| [\YooKassa\Request\Refunds\RefundsRequestSerializer](../classes/YooKassa-Request-Refunds-RefundsRequestSerializer.md) | Класс сериализатора объектов запросов к API для получения списка возвратов |
-| [\YooKassa\Request\Refunds\RefundsResponse](../classes/YooKassa-Request-Refunds-RefundsResponse.md) | Класс объекта ответа от API со списком возвратов магазина |
+| [\YooKassa\Request\Refunds\AbstractRefundResponse](../classes/YooKassa-Request-Refunds-AbstractRefundResponse.md) | Класс, представляющий модель AbstractRefundResponse. |
+| [\YooKassa\Request\Refunds\CreateRefundRequest](../classes/YooKassa-Request-Refunds-CreateRefundRequest.md) | Класс, представляющий модель CreateRefundRequest. |
+| [\YooKassa\Request\Refunds\CreateRefundRequestBuilder](../classes/YooKassa-Request-Refunds-CreateRefundRequestBuilder.md) | Класс, представляющий модель CreateRefundRequestBuilder. |
+| [\YooKassa\Request\Refunds\CreateRefundRequestSerializer](../classes/YooKassa-Request-Refunds-CreateRefundRequestSerializer.md) | Класс, представляющий модель CreateRefundRequestSerializer. |
+| [\YooKassa\Request\Refunds\CreateRefundResponse](../classes/YooKassa-Request-Refunds-CreateRefundResponse.md) | Класс, представляющий модель CreateRefundResponse. |
+| [\YooKassa\Request\Refunds\RefundResponse](../classes/YooKassa-Request-Refunds-RefundResponse.md) | Класс, представляющий модель RefundResponse. |
+| [\YooKassa\Request\Refunds\RefundsRequest](../classes/YooKassa-Request-Refunds-RefundsRequest.md) | Класс, представляющий модель RefundsRequest. |
+| [\YooKassa\Request\Refunds\RefundsRequestBuilder](../classes/YooKassa-Request-Refunds-RefundsRequestBuilder.md) | Класс, представляющий модель RefundsRequestBuilder. |
+| [\YooKassa\Request\Refunds\RefundsRequestSerializer](../classes/YooKassa-Request-Refunds-RefundsRequestSerializer.md) | Класс, представляющий модель RefundsRequestSerializer. |
+| [\YooKassa\Request\Refunds\RefundsResponse](../classes/YooKassa-Request-Refunds-RefundsResponse.md) | Класс, представляющий модель RefundsResponse. |
 
 ---
 
@@ -37,10 +41,10 @@
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

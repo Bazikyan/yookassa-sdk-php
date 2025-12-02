@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,437 +26,377 @@
 
 namespace YooKassa\Request\Refunds;
 
-use Exception;
+use DateTime;
 use YooKassa\Common\AbstractRequest;
-use YooKassa\Common\Exceptions\InvalidPropertyValueException;
 use YooKassa\Common\Exceptions\InvalidPropertyValueTypeException;
-use YooKassa\Helpers\TypeCast;
-use YooKassa\Model\RefundStatus;
+use YooKassa\Model\Refund\RefundStatus;
+use YooKassa\Validator\Constraints as Assert;
 
 /**
- * Класс объекта запроса к API списка возвратов магазина
+ * Класс, представляющий модель RefundsRequest.
  *
- * @package YooKassa
+ * Класс объекта запроса к API списка возвратов магазина.
  *
- * @property \DateTime $createdAtGte Время создания, от (включительно)
- * @property \DateTime $createdAtGt Время создания, от (не включая)
- * @property \DateTime $createdAtLte Время создания, до (включительно)
- * @property \DateTime $createdAtLt Время создания, до (не включая)
+ * @category Class
+ * @package  YooKassa\Request
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
+ *
+ * @property DateTime $createdAtGte Время создания, от (включительно)
+ * @property DateTime $created_at_gte Время создания, от (включительно)
+ * @property DateTime $createdAtGt Время создания, от (не включая)
+ * @property DateTime $created_at_gt Время создания, от (не включая)
+ * @property DateTime $createdAtLte Время создания, до (включительно)
+ * @property DateTime $created_at_lte Время создания, до (включительно)
+ * @property DateTime $createdAtLt Время создания, до (не включая)
+ * @property DateTime $created_at_lt Время создания, до (не включая)
  * @property string $paymentId Идентификатор платежа
+ * @property string $payment_id Идентификатор платежа
  * @property string $status Статус возврата
- * @property integer|null $limit Ограничение количества объектов возврата, отображаемых на одной странице выдачи
+ * @property null|int $limit Ограничение количества объектов возврата, отображаемых на одной странице выдачи
  * @property string $cursor Токен для получения следующей страницы выборки
  */
 class RefundsRequest extends AbstractRequest implements RefundsRequestInterface
 {
     /** Максимальное количество объектов возвратов в выборке */
-    const MAX_LIMIT_VALUE = 100;
+    public const MAX_LIMIT_VALUE = 100;
 
     /**
-     * @var \DateTime Время создания, от (включительно)
+     * @var DateTime|null Время создания, от (включительно)
      */
-    private $_createdAtGte;
+    #[Assert\DateTime(format: YOOKASSA_DATE)]
+    #[Assert\Type('DateTime')]
+    private ?DateTime $_createdAtGte = null;
 
     /**
-     * @var \DateTime Время создания, от (не включая)
+     * @var DateTime|null Время создания, от (не включая)
      */
-    private $_createdAtGt;
+    #[Assert\DateTime(format: YOOKASSA_DATE)]
+    #[Assert\Type('DateTime')]
+    private ?DateTime $_createdAtGt = null;
 
     /**
-     * @var \DateTime Время создания, до (включительно)
+     * @var DateTime|null Время создания, до (включительно)
      */
-    private $_createdAtLte;
+    #[Assert\DateTime(format: YOOKASSA_DATE)]
+    #[Assert\Type('DateTime')]
+    private ?DateTime $_createdAtLte = null;
 
     /**
-     * @var \DateTime Время создания, до (не включая)
+     * @var DateTime|null Время создания, до (не включая)
      */
-    private $_createdAtLt;
+    #[Assert\DateTime(format: YOOKASSA_DATE)]
+    #[Assert\Type('DateTime')]
+    private ?DateTime $_createdAtLt = null;
 
     /**
-     * @var string Идентификатор шлюза
+     * @var string|null Идентификатор шлюза
      */
-    private $_paymentId;
+    #[Assert\Type('string')]
+    #[Assert\Length(max: 36)]
+    #[Assert\Length(min: 36)]
+    private ?string $_paymentId = null;
 
     /**
-     * @var string Статус возврата
+     * @var string|null Статус возврата
      */
-    private $_status;
+    #[Assert\Choice(callback: [RefundStatus::class, 'getValidValues'])]
+    #[Assert\Type('string')]
+    private ?string $_status = null;
 
     /**
-     * @var string Ограничение количества объектов платежа
+     * @var int|null Ограничение количества объектов платежа
      */
-    private $_limit;
+    #[Assert\Type('int')]
+    #[Assert\GreaterThanOrEqual(value: 1)]
+    #[Assert\LessThanOrEqual(self::MAX_LIMIT_VALUE)]
+    private ?int $_limit = null;
 
     /**
-     * @var string Токен для получения следующей страницы выборки
+     * @var string|null Токен для получения следующей страницы выборки
      */
-    private $_cursor;
+    #[Assert\Type('string')]
+    private ?string $_cursor = null;
 
     /**
-     * Возвращает идентификатор платежа если он задан или null
-     * @return string|null Идентификатор платежа
+     * Возвращает идентификатор платежа если он задан или null.
+     *
+     * @return null|string Идентификатор платежа
      */
-    public function getPaymentId()
+    public function getPaymentId(): ?string
     {
         return $this->_paymentId;
     }
 
     /**
-     * Проверяет, был ли задан идентификатор платежа
+     * Проверяет, был ли задан идентификатор платежа.
+     *
      * @return bool True если идентификатор был задан, false если нет
      */
-    public function hasPaymentId()
+    public function hasPaymentId(): bool
     {
         return !empty($this->_paymentId);
     }
 
     /**
-     * Устанавливает идентификатор платежа или null, если требуется его удалить
-     * @param string|null $value Идентификатор платежа
+     * Устанавливает идентификатор платежа или null, если требуется его удалить.
      *
-     * @throws InvalidPropertyValueException Выбрасывается если длина переданной строки не равна 36 символам
-     * @throws InvalidPropertyValueTypeException Выбрасывается если в метод была передана не строка
+     * @param null|string $value Идентификатор платежа
+     *
+     * @return self
      */
-    public function setPaymentId($value)
+    public function setPaymentId(?string $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_paymentId = null;
-        } elseif (TypeCast::canCastToString($value)) {
-            $length = mb_strlen((string)$value, 'utf-8');
-            if ($length != 36) {
-                throw new InvalidPropertyValueException(
-                    'Invalid payment id value in RefundsRequest', 0, 'RefundsRequest.paymentId', $value
-                );
-            }
-            $this->_paymentId = (string)$value;
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid payment id value type in RefundsRequest', 0, 'RefundsRequest.paymentId', $value
-            );
-        }
+        $this->_paymentId = $this->validatePropertyValue('_paymentId', $value);
+        return $this;
     }
 
     /**
-     * Возвращает дату создания от которой будут возвращены возвраты или null, если дата не была установлена
-     * @return \DateTime|null Время создания, от (включительно)
+     * Возвращает дату создания от которой будут возвращены возвраты или null, если дата не была установлена.
+     *
+     * @return null|DateTime Время создания, от (включительно)
      */
-    public function getCreatedAtGte()
+    public function getCreatedAtGte(): ?DateTime
     {
         return $this->_createdAtGte;
     }
 
     /**
-     * Проверяет, была ли установлена дата создания от которой выбираются возвраты
+     * Проверяет, была ли установлена дата создания от которой выбираются возвраты.
+     *
      * @return bool True если дата была установлена, false если нет
      */
-    public function hasCreatedAtGte()
+    public function hasCreatedAtGte(): bool
     {
         return !empty($this->_createdAtGte);
     }
 
     /**
-     * Устанавливает дату создания от которой выбираются возвраты
-     * @param \DateTime|string|int|null $value Время создания, от (включительно) или null, чтобы удалить значение
+     * Устанавливает дату создания от которой выбираются возвраты.
      *
-     * @throws InvalidPropertyValueException Генерируется если была передана дата в невалидном формате (была передана
-     * строка или число, которые не удалось преобразовать в валидную дату)
-     * @throws InvalidPropertyValueTypeException|Exception Генерируется если была передана дата с не тем типом (передана не
-     * строка, не число и не значение типа \DateTime)
+     * @param DateTime|string|null $value Время создания, от (включительно) или null, чтобы удалить значение
+     *
+     * @return self
      */
-    public function setCreatedAtGte($value)
+    public function setCreatedAtGte(mixed $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_createdAtGte = null;
-        } elseif (TypeCast::canCastToDateTime($value)) {
-            $dateTime = TypeCast::castToDateTime($value);
-            if ($dateTime === null) {
-                throw new InvalidPropertyValueException(
-                    'Invalid created_gte value in RefundsRequest', 0, 'RefundsRequest.createdAtGte'
-                );
-            }
-            $this->_createdAtGte = $dateTime;
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid created_gte value type in RefundsRequest', 0, 'RefundsRequest.createdAtGte'
-            );
-        }
+        $this->_createdAtGte = $this->validatePropertyValue('_createdAtGte', $value);
+        return $this;
     }
 
     /**
-     * Возвращает дату создания от которой будут возвращены возвраты или null, если дата не была установлена
-     * @return \DateTime|null Время создания, от (не включая)
+     * Возвращает дату создания от которой будут возвращены возвраты или null, если дата не была установлена.
+     *
+     * @return null|DateTime Время создания, от (не включая)
      */
-    public function getCreatedAtGt()
+    public function getCreatedAtGt(): ?DateTime
     {
         return $this->_createdAtGt;
     }
 
     /**
-     * Проверяет, была ли установлена дата создания от которой выбираются возвраты
+     * Проверяет, была ли установлена дата создания от которой выбираются возвраты.
+     *
      * @return bool True если дата была установлена, false если нет
      */
-    public function hasCreatedAtGt()
+    public function hasCreatedAtGt(): bool
     {
         return !empty($this->_createdAtGt);
     }
 
     /**
-     * Устанавливает дату создания от которой выбираются возвраты
-     * @param \DateTime|string|int|null $value Время создания, от (не включая) или null, чтобы удалить значение
+     * Устанавливает дату создания от которой выбираются возвраты.
      *
-     * @throws InvalidPropertyValueException Генерируется если была передана дата в невалидном формате (была передана
-     * строка или число, которые не удалось преобразовать в валидную дату)
-     * @throws InvalidPropertyValueTypeException|Exception Генерируется если была передана дата с не тем типом (передана не
-     * строка, не число и не значение типа \DateTime)
+     * @param DateTime|string|null $value Время создания, от (не включая) или null, чтобы удалить значение
+     *
+     * @return self
      */
-    public function setCreatedAtGt($value)
+    public function setCreatedAtGt(mixed $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_createdAtGt = null;
-        } elseif (TypeCast::canCastToDateTime($value)) {
-            $dateTime = TypeCast::castToDateTime($value);
-            if ($dateTime === null) {
-                throw new InvalidPropertyValueException(
-                    'Invalid created_gt value in RefundsRequest', 0, 'RefundsRequest.createdAtGt'
-                );
-            }
-            $this->_createdAtGt = $dateTime;
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid created_gt value type in RefundsRequest', 0, 'RefundsRequest.createdAtGt'
-            );
-        }
+        $this->_createdAtGt = $this->validatePropertyValue('_createdAtGt', $value);
+        return $this;
     }
 
     /**
-     * Возвращает дату создания до которой будут возвращены возвраты или null, если дата не была установлена
-     * @return \DateTime|null Время создания, до (включительно)
+     * Возвращает дату создания до которой будут возвращены возвраты или null, если дата не была установлена.
+     *
+     * @return null|DateTime Время создания, до (включительно)
      */
-    public function getCreatedAtLte()
+    public function getCreatedAtLte(): ?DateTime
     {
         return $this->_createdAtLte;
     }
 
     /**
-     * Проверяет, была ли установлена дата создания до которой выбираются возвраты
+     * Проверяет, была ли установлена дата создания до которой выбираются возвраты.
+     *
      * @return bool True если дата была установлена, false если нет
      */
-    public function hasCreatedAtLte()
+    public function hasCreatedAtLte(): bool
     {
         return !empty($this->_createdAtLte);
     }
 
     /**
-     * Устанавливает дату создания до которой выбираются возвраты
-     * @param \DateTime|string|int|null $value Время создания, до (включительно) или null, чтобы удалить значение
+     * Устанавливает дату создания до которой выбираются возвраты.
      *
-     * @throws InvalidPropertyValueException Генерируется если была передана дата в невалидном формате (была передана
-     * строка или число, которые не удалось преобразовать в валидную дату)
-     * @throws InvalidPropertyValueTypeException|Exception Генерируется если была передана дата с не тем типом (передана не
-     * строка, не число и не значение типа \DateTime)
+     * @param DateTime|string|null $value Время создания, до (включительно) или null, чтобы удалить значение
+     *
+     * @return self
      */
-    public function setCreatedAtLte($value)
+    public function setCreatedAtLte(mixed $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_createdAtLte = null;
-        } elseif (TypeCast::canCastToDateTime($value)) {
-            $dateTime = TypeCast::castToDateTime($value);
-            if ($dateTime === null) {
-                throw new InvalidPropertyValueException(
-                    'Invalid created_lte value in RefundsRequest', 0, 'RefundsRequest.createdLte'
-                );
-            }
-            $this->_createdAtLte = $dateTime;
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid created_lte value type in RefundsRequest', 0, 'RefundsRequest.createdLte'
-            );
-        }
+        $this->_createdAtLte = $this->validatePropertyValue('_createdAtLte', $value);
+        return $this;
     }
 
     /**
-     * Возвращает дату создания до которой будут возвращены возвраты или null, если дата не была установлена
-     * @return \DateTime|null Время создания, до (не включая)
+     * Возвращает дату создания до которой будут возвращены возвраты или null, если дата не была установлена.
+     *
+     * @return null|DateTime Время создания, до (не включая)
      */
-    public function getCreatedAtLt()
+    public function getCreatedAtLt(): ?DateTime
     {
         return $this->_createdAtLt;
     }
 
     /**
-     * Проверяет, была ли установлена дата создания до которой выбираются возвраты
+     * Проверяет, была ли установлена дата создания до которой выбираются возвраты.
+     *
      * @return bool True если дата была установлена, false если нет
      */
-    public function hasCreatedAtLt()
+    public function hasCreatedAtLt(): bool
     {
         return !empty($this->_createdAtLt);
     }
 
     /**
-     * Устанавливает дату создания до которой выбираются возвраты
-     * @param \DateTime|string|int|null $value Время создания, до (не включая) или null, чтобы удалить значение
+     * Устанавливает дату создания до которой выбираются возвраты.
      *
-     * @throws InvalidPropertyValueException Генерируется если была передана дата в невалидном формате (была передана
-     * строка или число, которые не удалось преобразовать в валидную дату)
-     * @throws InvalidPropertyValueTypeException|Exception Генерируется если была передана дата с не тем типом (передана не
-     * строка, не число и не значение типа \DateTime)
-     */
-    public function setCreatedAtLt($value)
+     * @param DateTime|string|null $value Время создания, до (не включая) или null, чтобы удалить значение
+     *
+     * @return self
+ */
+    public function setCreatedAtLt(mixed $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_createdAtLt = null;
-        } elseif (TypeCast::canCastToDateTime($value)) {
-            $dateTime = TypeCast::castToDateTime($value);
-            if ($dateTime === null) {
-                throw new InvalidPropertyValueException(
-                    'Invalid created_lt value in RefundsRequest', 0, 'RefundsRequest.createdLt'
-                );
-            }
-            $this->_createdAtLt = $dateTime;
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid created_lt value type in RefundsRequest', 0, 'RefundsRequest.createdLt'
-            );
-        }
+        $this->_createdAtLt = $this->validatePropertyValue('_createdAtLt', $value);
+        return $this;
     }
 
     /**
-     * Возвращает статус выбираемых возвратов или null, если он до этого не был установлен
-     * @return string|null Статус выбираемых возвратов
+     * Возвращает статус выбираемых возвратов или null, если он до этого не был установлен.
+     *
+     * @return null|string Статус выбираемых возвратов
      */
-    public function getStatus()
+    public function getStatus(): ?string
     {
         return $this->_status;
     }
 
     /**
-     * Проверяет, был ли установлен статус выбираемых возвратов
+     * Проверяет, был ли установлен статус выбираемых возвратов.
+     *
      * @return bool True если статус был установлен, false если нет
      */
-    public function hasStatus()
+    public function hasStatus(): bool
     {
         return !empty($this->_status);
     }
 
     /**
-     * Устанавливает статус выбираемых возвратов
-     * @param string $value Статус выбираемых платежей или null, чтобы удалить значение
+     * Устанавливает статус выбираемых возвратов.
      *
-     * @throws InvalidPropertyValueException Выбрасывается если переданное значение не является валидным статусом
-     * @throws InvalidPropertyValueTypeException Выбрасывается если в метод была передана не строка
+     * @param string|null $value Статус выбираемых платежей или null, чтобы удалить значение
+     *
+     * @return self
      */
-    public function setStatus($value)
+    public function setStatus(?string $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_status = null;
-        } elseif (TypeCast::canCastToEnumString($value)) {
-            if (!RefundStatus::valueExists((string)$value)) {
-                throw new InvalidPropertyValueException(
-                    'Invalid status value in RefundsRequest', 0, 'RefundsRequest.status', $value
-                );
-            } else {
-                $this->_status = (string)$value;
-            }
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid status value in RefundsRequest', 0, 'RefundsRequest.status', $value
-            );
-        }
+        $this->_status = $this->validatePropertyValue('_status', $value);
+        return $this;
     }
 
     /**
-     * Возвращает токен для получения следующей страницы выборки
-     * @return string|null Токен для получения следующей страницы выборки
+     * Возвращает токен для получения следующей страницы выборки.
+     *
+     * @return null|string Токен для получения следующей страницы выборки
      */
-    public function getCursor()
+    public function getCursor(): ?string
     {
         return $this->_cursor;
     }
 
     /**
-     * Проверяет, был ли установлен токен следующей страницы
+     * Проверяет, был ли установлен токен следующей страницы.
+     *
      * @return bool True если токен был установлен, false если нет
      */
-    public function hasCursor()
+    public function hasCursor(): bool
     {
         return !empty($this->_cursor);
     }
 
     /**
-     * Устанавливает токен следующей страницы выборки
-     * @param string $value Токен следующей страницы выборки или null, чтобы удалить значение
+     * Устанавливает токен следующей страницы выборки.
      *
-     * @throws InvalidPropertyValueTypeException Выбрасывается если в метод была передана не строка
+     * @param string|null $value Токен следующей страницы выборки или null, чтобы удалить значение
+     *
      */
-    public function setCursor($value)
+    public function setCursor(?string $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_cursor = null;
-        } elseif (TypeCast::canCastToString($value)) {
-            $this->_cursor = (string) $value;
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid status value in RefundsRequest', 0, 'RefundsRequest.cursor', $value
-            );
-        }
+        $this->_cursor = $this->validatePropertyValue('_cursor', $value);
+        return $this;
     }
 
     /**
-     * Ограничение количества объектов платежа
-     * @return integer|null Ограничение количества объектов платежа
+     * Ограничение количества объектов платежа.
+     *
+     * @return null|int Ограничение количества объектов платежа
      */
-    public function getLimit()
+    public function getLimit(): ?int
     {
         return $this->_limit;
     }
 
     /**
-     * Проверяет, было ли установлено ограничение количества объектов платежа
+     * Проверяет, было ли установлено ограничение количества объектов платежа.
+     *
      * @return bool True если было установлено, false если нет
      */
-    public function hasLimit()
+    public function hasLimit(): bool
     {
-        return $this->_limit !== null;
+        return null !== $this->_limit;
     }
 
     /**
-     * Устанавливает ограничение количества объектов платежа
-     * @param integer|null $value Ограничение количества объектов платежа или null, чтобы удалить значение
+     * Устанавливает ограничение количества объектов платежа.
+     *
+     * @param null|int|string $value Ограничение количества объектов платежа или null, чтобы удалить значение
      *
      * @throws InvalidPropertyValueTypeException Выбрасывается, если в метод было передано не целое число
      */
-    public function setLimit($value)
+    public function setLimit(mixed $value): self
     {
-        if ($value === null || $value === '') {
-            $this->_limit = null;
-        } elseif (is_int($value)) {
-            if ($value < 0 || $value > self::MAX_LIMIT_VALUE) {
-                throw new InvalidPropertyValueException(
-                    'Invalid limit value in RefundsRequest', 0, 'RefundsRequest.limit', $value
-                );
-            }
-            $this->_limit = $value;
-        } else {
-            throw new InvalidPropertyValueTypeException(
-                'Invalid limit value type in RefundsRequest', 0, 'RefundsRequest.limit', $value
-            );
-        }
+        $this->_limit = $this->validatePropertyValue('_limit', $value);
+        return $this;
     }
 
     /**
-     * Проверяет валидность текущего объекта запроса
+     * Проверяет валидность текущего объекта запроса.
+     *
      * @return bool True если объект валиден, false если нет
      */
-    public function validate()
+    public function validate(): bool
     {
         return true;
     }
 
     /**
-     * Возвращает инстанс билдера объектов запросов списка возвратов магазина
+     * Возвращает инстанс билдера объектов запросов списка возвратов магазина.
+     *
      * @return RefundsRequestBuilder Билдер объектов запросов списка возвратов
      */
-    public static function builder()
+    public static function builder(): RefundsRequestBuilder
     {
         return new RefundsRequestBuilder();
     }

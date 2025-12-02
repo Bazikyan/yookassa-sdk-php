@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,38 +26,39 @@
 
 namespace YooKassa\Model\Notification;
 
-
-use YooKassa\Model\PaymentInterface;
-use YooKassa\Model\RefundInterface;
+use YooKassa\Model\Deal\DealInterface;
+use YooKassa\Model\Payment\PaymentInterface;
+use YooKassa\Model\Payout\PayoutInterface;
+use YooKassa\Model\Refund\RefundInterface;
 
 interface NotificationInterface
 {
     /**
-     * Возвращает тип уведомления
+     * Возвращает тип уведомления.
      *
      * Тип уведомления - одна из констант, указанных в перечислении {@link NotificationType}.
      *
-     * @return string Тип уведомления в виде строки
+     * @return string|null Тип уведомления в виде строки
      */
-    function getType();
+    public function getType(): ?string;
 
     /**
-     * Возвращает тип события
+     * Возвращает тип события.
      *
      * Тип события - одна из констант, указанных в перечислении {@link NotificationEventType}.
      *
-     * @return string Тип события
+     * @return string|null Тип события
      */
-    function getEvent();
+    public function getEvent(): ?string;
 
     /**
-     * Возвращает объект с информацией о платеже или возврате, уведомление о котором хранится в текущем объекте
+     * Возвращает объект с информацией о платеже или возврате, уведомление о котором хранится в текущем объекте.
      *
      * Так как нотификация может быть сгенерирована и поставлена в очередь на отправку гораздо раньше, чем она будет
      * получена на сайте, то опираться на статус пришедшего платежа не стоит, лучше запросить текущую информацию о
      * платеже у API.
      *
-     * @return PaymentInterface|RefundInterface Объект с информацией о платеже
+     * @return PaymentInterface|RefundInterface|PayoutInterface|DealInterface|null Объект с информацией о платеже
      */
-    function getObject();
+    public function getObject(): RefundInterface|PaymentInterface|PayoutInterface|DealInterface|null;
 }

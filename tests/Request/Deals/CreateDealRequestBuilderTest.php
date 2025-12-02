@@ -1,53 +1,66 @@
 <?php
 
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
+
 namespace Tests\YooKassa\Request\Deals;
 
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use YooKassa\Helpers\Random;
 use YooKassa\Model\Deal\DealType;
 use YooKassa\Model\Deal\FeeMoment;
-use YooKassa\Model\SafeDeal;
+use YooKassa\Model\Deal\SafeDeal;
+use YooKassa\Model\Metadata;
 use YooKassa\Request\Deals\CreateDealRequestBuilder;
 
+/**
+ * CreateDealRequestBuilderTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
 class CreateDealRequestBuilderTest extends TestCase
 {
     /**
-     * @param null $testingProperty
-     * @param null $paymentType
-     * @return array
-     * @throws Exception
-     */
-    protected function getRequiredData($testingProperty = null, $paymentType = null)
-    {
-        $result = array();
-
-        if ($testingProperty !== 'type') {
-            $result['type'] = Random::value(DealType::getValidValues());
-        }
-
-        if ($testingProperty !== 'fee_moment') {
-            $result['fee_moment'] = Random::value(FeeMoment::getValidValues());
-        }
-
-        return $result;
-    }
-
-    /**
      * @dataProvider validDataProvider
      *
-     * @param $options
+     * @param mixed $options
+     *
      * @throws Exception
      */
-    public function testSetType($options)
+    public function testSetType(mixed $options): void
     {
         $builder = new CreateDealRequestBuilder();
 
         $builder->setType($options['type']);
         $instance = $builder->build($this->getRequiredData('type'));
 
-        if ($options['type'] === null || $options['type'] === '') {
+        if (null === $options['type'] || '' === $options['type']) {
             self::assertNull($instance->getType());
         } else {
             self::assertNotNull($instance->getType());
@@ -56,13 +69,13 @@ class CreateDealRequestBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidDataProvider
-     * @expectedException InvalidArgumentException
+     * @dataProvider invalidDescriptionDataProvider
      *
-     * @param $options
+     * @param mixed $options
      */
-    public function testSetInvalidTypeType($options)
+    public function testSetInvalidType(mixed $options): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $builder = new CreateDealRequestBuilder();
         $builder->setType($options);
     }
@@ -70,17 +83,18 @@ class CreateDealRequestBuilderTest extends TestCase
     /**
      * @dataProvider validDataProvider
      *
-     * @param $options
+     * @param mixed $options
+     *
      * @throws Exception
      */
-    public function testSetFeeMoment($options)
+    public function testSetFeeMoment(mixed $options): void
     {
         $builder = new CreateDealRequestBuilder();
 
         $builder->setFeeMoment($options['fee_moment']);
         $instance = $builder->build($this->getRequiredData('fee_moment'));
 
-        if ($options['fee_moment'] === null || $options['fee_moment'] === '') {
+        if (null === $options['fee_moment'] || '' === $options['fee_moment']) {
             self::assertNull($instance->getFeeMoment());
         } else {
             self::assertNotNull($instance->getFeeMoment());
@@ -89,13 +103,13 @@ class CreateDealRequestBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidDataProvider
-     * @expectedException InvalidArgumentException
+     * @dataProvider invalidDescriptionDataProvider
      *
-     * @param $options
+     * @param mixed $options
      */
-    public function testSetInvalidTypeFeeMoment($options)
+    public function testSetInvalidFeeMoment(mixed $options): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $builder = new CreateDealRequestBuilder();
         $builder->setFeeMoment($options);
     }
@@ -103,10 +117,11 @@ class CreateDealRequestBuilderTest extends TestCase
     /**
      * @dataProvider validDataProvider
      *
-     * @param $options
+     * @param mixed $options
+     *
      * @throws Exception
      */
-    public function testSetMetadata($options)
+    public function testSetMetadata(mixed $options): void
     {
         $builder = new CreateDealRequestBuilder();
 
@@ -125,12 +140,12 @@ class CreateDealRequestBuilderTest extends TestCase
 
     /**
      * @dataProvider invalidDataProvider
-     * @expectedException InvalidArgumentException
      *
-     * @param $options
+     * @param mixed $options
      */
-    public function testSetInvalidTypeMetadata($options)
+    public function testSetInvalidMetadata(mixed $options): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $builder = new CreateDealRequestBuilder();
         $builder->setMetadata($options);
     }
@@ -138,10 +153,11 @@ class CreateDealRequestBuilderTest extends TestCase
     /**
      * @dataProvider validDataProvider
      *
-     * @param $options
+     * @param mixed $options
+     *
      * @throws Exception
      */
-    public function testSetDescription($options)
+    public function testSetDescription(mixed $options): void
     {
         $builder = new CreateDealRequestBuilder();
 
@@ -156,72 +172,106 @@ class CreateDealRequestBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidDataProvider
-     * @expectedException InvalidArgumentException
+     * @dataProvider invalidDescriptionDataProvider
      *
-     * @param $options
+     * @param mixed $options
      */
-    public function testSetInvalidTypeDescription($options)
+    public function testSetInvalidDescription(mixed $options): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $builder = new CreateDealRequestBuilder();
         $builder->setDescription($options);
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @return void
+     * @throws Exception
      */
-    public function testSetInvalidLengthDescription()
+    public function testSetInvalidLengthDescription(): void
     {
-        $builder     = new CreateDealRequestBuilder();
+        $this->expectException(InvalidArgumentException::class);
+        $builder = new CreateDealRequestBuilder();
         $description = Random::str(SafeDeal::MAX_LENGTH_DESCRIPTION + 1);
         $builder->setDescription($description);
     }
 
     /**
-     * @return array
      * @throws Exception
      */
-    public function validDataProvider()
+    public static function validDataProvider(): array
     {
-        $result = array(
-            array(
-                array(
+        $result = [
+            [
+                [
                     'type' => Random::value(DealType::getValidValues()),
                     'fee_moment' => Random::value(FeeMoment::getValidValues()),
                     'description' => null,
                     'metadata' => null,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'type' => Random::value(DealType::getValidValues()),
                     'fee_moment' => Random::value(FeeMoment::getValidValues()),
-                    'description' => '',
-                    'metadata' => array(),
-                ),
-            ),
-        );
+                    'description' => Random::str(1, SafeDeal::MAX_LENGTH_DESCRIPTION),
+                    'metadata' => [new Metadata()],
+                ],
+            ],
+        ];
         for ($i = 0; $i < 10; $i++) {
-            $request = array(
+            $request = [
                 'type' => Random::value(DealType::getValidValues()),
                 'fee_moment' => Random::value(FeeMoment::getValidValues()),
-                'description' => Random::str(1, 128),
-                'metadata' => array(Random::str(1, 30) => Random::str(1, 128)),
-            );
-            $result[] = array($request);
+                'description' => Random::str(1, SafeDeal::MAX_LENGTH_DESCRIPTION),
+                'metadata' => [Random::str(1, 30) => Random::str(1, 128)],
+            ];
+            $result[] = [$request];
         }
 
         return $result;
     }
 
-    public function invalidDataProvider()
+    /**
+     * @return array
+     */
+    public static function invalidDataProvider(): array
     {
-        return array(
-            array(false),
-            array(true),
-            array(new \stdClass()),
-            array(new SafeDeal()),
-        );
+        return [
+            [false],
+            [true],
+            [new stdClass()],
+            [new SafeDeal()],
+        ];
     }
 
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public static function invalidDescriptionDataProvider(): array
+    {
+        return [
+            [Random::str(SafeDeal::MAX_LENGTH_DESCRIPTION + 1)],
+        ];
+    }
+
+    /**
+     * @param null $testingProperty
+     *
+     * @throws Exception
+     */
+    protected function getRequiredData($testingProperty = null): array
+    {
+        $result = [];
+
+        if ('type' !== $testingProperty) {
+            $result['type'] = Random::value(DealType::getValidValues());
+        }
+
+        if ('fee_moment' !== $testingProperty) {
+            $result['fee_moment'] = Random::value(FeeMoment::getValidValues());
+        }
+
+        return $result;
+    }
 }

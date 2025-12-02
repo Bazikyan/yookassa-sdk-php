@@ -5,7 +5,7 @@
 ---
 **Summary:**
 
-Класс сериалайзера объекта запроса к API создание чека
+Класс сериалайзера объекта запроса к API создание чека.
 
 
 ---
@@ -16,12 +16,12 @@
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [serialize()](../classes/YooKassa-Request-Receipts-CreatePostReceiptRequestSerializer.md#method_serialize) |  | Сериализует объект запроса к API для дальнейшей его отправки |
+| public | [serialize()](../classes/YooKassa-Request-Receipts-CreatePostReceiptRequestSerializer.md#method_serialize) |  | Сериализует объект запроса к API для дальнейшей его отправки. |
 
 ---
 ### Details
 * File: [lib/Request/Receipts/CreatePostReceiptRequestSerializer.php](../../lib/Request/Receipts/CreatePostReceiptRequestSerializer.php)
-* Package: YooKassa
+* Package: Default
 * Class Hierarchy:
   * \YooKassa\Request\Receipts\CreatePostReceiptRequestSerializer
 
@@ -36,7 +36,7 @@ public serialize(\YooKassa\Request\Receipts\CreatePostReceiptRequestInterface $r
 
 **Summary**
 
-Сериализует объект запроса к API для дальнейшей его отправки
+Сериализует объект запроса к API для дальнейшей его отправки.
 
 **Details:**
 * Inherited From: [\YooKassa\Request\Receipts\CreatePostReceiptRequestSerializer](../classes/YooKassa-Request-Receipts-CreatePostReceiptRequestSerializer.md)
@@ -61,10 +61,10 @@ public serialize(\YooKassa\Request\Receipts\CreatePostReceiptRequestInterface $r
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

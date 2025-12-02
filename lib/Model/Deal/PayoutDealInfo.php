@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,36 +27,58 @@
 namespace YooKassa\Model\Deal;
 
 use YooKassa\Common\AbstractObject;
+use YooKassa\Validator\Constraints as Assert;
 
 /**
- * Class PayoutDealInfo
+ * Класс, представляющий модель PayoutDealInfo.
  *
- * @package YooKassa
+ * Сделка, в рамках которой нужно провести выплату.
  *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  * @property string $id Идентификатор сделки
  */
 class PayoutDealInfo extends AbstractObject
 {
-    /** @var string Идентификатор сделки */
-    private $_id;
+    /** @var int Максимальная длина строки id сделки. */
+    public const MAX_LENGTH_ID = 50;
+
+    /** @var int Минимальная длина строки id сделки. */
+    public const MIN_LENGTH_ID = 36;
 
     /**
-     * Возвращает Id сделки
+     * Идентификатор сделки.
+     *
+     * @var string|null
      */
-    public function getId()
+    #[Assert\NotBlank]
+    #[Assert\Type('string')]
+    #[Assert\Length(max: self::MAX_LENGTH_ID)]
+    #[Assert\Length(min: self::MIN_LENGTH_ID)]
+    private ?string $_id = null;
+
+    /**
+     * Возвращает Id сделки.
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
     {
         return $this->_id;
     }
 
     /**
-     * Устанавливает Id сделки
+     * Устанавливает Id сделки.
      *
-     * @param string $value Id сделки
-     * @return PayoutDealInfo
+     * @param string|null $id Идентификатор сделки.
+     *
+     * @return self
      */
-    public function setId($value)
+    public function setId(?string $id = null): self
     {
-        $this->_id = $value;
+        $this->_id = $this->validatePropertyValue('_id', $id);
         return $this;
     }
 }

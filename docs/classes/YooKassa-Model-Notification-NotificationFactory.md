@@ -27,41 +27,43 @@ try {
 
     if (!$client->isNotificationIPTrusted($_SERVER['REMOTE_ADDR'])) {
         header('HTTP/1.1 400 Something went wrong');
-        exit();
+
+        exit;
     }
 
-    if ($notificationObject->getEvent() === \YooKassa\Model\NotificationEventType::PAYMENT_SUCCEEDED) {
-        $someData = array(
+    if (\YooKassa\Model\Notification\NotificationEventType::PAYMENT_SUCCEEDED === $notificationObject->getEvent()) {
+        $someData = [
             'paymentId' => $responseObject->getId(),
             'paymentStatus' => $responseObject->getStatus(),
-        );
-        // Специфичная логика
-        // ...
-    } elseif ($notificationObject->getEvent() === \YooKassa\Model\NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE) {
-        $someData = array(
+        ];
+    // Специфичная логика
+    // ...
+    } elseif (\YooKassa\Model\Notification\NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE === $notificationObject->getEvent()) {
+        $someData = [
             'paymentId' => $responseObject->getId(),
             'paymentStatus' => $responseObject->getStatus(),
-        );
-        // Специфичная логика
-        // ...
-    } elseif ($notificationObject->getEvent() === \YooKassa\Model\NotificationEventType::PAYMENT_CANCELED) {
-        $someData = array(
+        ];
+    // Специфичная логика
+    // ...
+    } elseif (\YooKassa\Model\Notification\NotificationEventType::PAYMENT_CANCELED === $notificationObject->getEvent()) {
+        $someData = [
             'paymentId' => $responseObject->getId(),
             'paymentStatus' => $responseObject->getStatus(),
-        );
-        // Специфичная логика
-        // ...
-    } elseif ($notificationObject->getEvent() === \YooKassa\Model\NotificationEventType::REFUND_SUCCEEDED) {
-        $someData = array(
+        ];
+    // Специфичная логика
+    // ...
+    } elseif (\YooKassa\Model\Notification\NotificationEventType::REFUND_SUCCEEDED === $notificationObject->getEvent()) {
+        $someData = [
             'refundId' => $responseObject->getId(),
             'refundStatus' => $responseObject->getStatus(),
             'paymentId' => $responseObject->getPaymentId(),
-        );
-        // ...
-        // Специфичная логика
+        ];
+    // ...
+    // Специфичная логика
     } else {
         header('HTTP/1.1 400 Something went wrong');
-        exit();
+
+        exit;
     }
 
     // Специфичная логика
@@ -72,18 +74,18 @@ try {
     // Получим актуальную информацию о платеже
     if ($paymentInfo = $client->getPaymentInfo($someData['paymentId'])) {
         $paymentStatus = $paymentInfo->getStatus();
-        // Специфичная логика
-        // ...
+    // Специфичная логика
+    // ...
     } else {
         header('HTTP/1.1 400 Something went wrong');
-        exit();
-    }
 
+        exit;
+    }
 } catch (Exception $e) {
     header('HTTP/1.1 400 Something went wrong');
-    exit();
-}
 
+    exit;
+}
 
 ```
 
@@ -100,7 +102,7 @@ try {
 ---
 ### Details
 * File: [lib/Model/Notification/NotificationFactory.php](../../lib/Model/Notification/NotificationFactory.php)
-* Package: YooKassa
+* Package: Default
 * Class Hierarchy:
   * \YooKassa\Model\Notification\NotificationFactory
 
@@ -136,10 +138,10 @@ public factory(array $data) : \YooKassa\Model\Notification\AbstractNotification
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

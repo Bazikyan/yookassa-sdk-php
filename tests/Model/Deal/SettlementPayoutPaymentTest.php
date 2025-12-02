@@ -1,195 +1,171 @@
 <?php
 
-namespace Tests\YooKassa\Model;
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
 
-use PHPUnit\Framework\TestCase;
-use YooKassa\Common\Exceptions\EmptyPropertyValueException;
-use YooKassa\Helpers\Random;
-use YooKassa\Model\AmountInterface;
-use YooKassa\Model\CurrencyCode;
+namespace Tests\YooKassa\Model\Deal;
+
+use Exception;
+use Tests\YooKassa\AbstractTestCase;
+use Datetime;
 use YooKassa\Model\Deal\SettlementPayoutPayment;
-use YooKassa\Model\Deal\SettlementPayoutPaymentType;
-use YooKassa\Model\MonetaryAmount;
+use YooKassa\Model\Metadata;
 
-class SettlementPayoutPaymentTest extends TestCase
+/**
+ * SettlementPayoutPaymentTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
+class SettlementPayoutPaymentTest extends AbstractTestCase
 {
-    protected function getTestInstance()
+    protected SettlementPayoutPayment $object;
+
+    /**
+     * @return SettlementPayoutPayment
+     */
+    protected function getTestInstance(): SettlementPayoutPayment
     {
         return new SettlementPayoutPayment();
     }
 
     /**
-     * @dataProvider validDataProvider
-     *
-     * @param array $value
+     * @return void
      */
-    public function testFromArray($value)
+    public function testSettlementPayoutPaymentClassExists(): void
     {
-        $instance = $this->getTestInstance();
-
-        self::assertNull($instance->getType());
-        self::assertNull($instance->getAmount());
-        self::assertNull($instance->type);
-        self::assertNull($instance->amount);
-
-        $instance->fromArray($value);
-
-        self::assertSame($value['type'], $instance->getType());
-        self::assertSame($value['type'], $instance->type);
-        self::assertSame($value['amount'], $instance->getAmount()->jsonSerialize());
-        self::assertSame($value['amount'], $instance->amount->jsonSerialize());
-
-        self::assertSame($value, $instance->jsonSerialize());
+        $this->object = $this->getMockBuilder(SettlementPayoutPayment::class)->getMockForAbstractClass();
+        $this->assertTrue(class_exists(SettlementPayoutPayment::class));
+        $this->assertInstanceOf(SettlementPayoutPayment::class, $this->object);
     }
 
     /**
-     * @dataProvider validDataProvider
+     * Test property "type"
+     * @dataProvider validTypeDataProvider
+     * @param mixed $value
      *
-     * @param array $value
+     * @return void
+     * @throws Exception
      */
-    public function testGetSetType($value)
+    public function testType(mixed $value): void
     {
         $instance = $this->getTestInstance();
-
-        self::assertNull($instance->getType());
-        self::assertNull($instance->type);
-        $instance->setType($value['type']);
-        self::assertSame($value['type'], $instance->getType());
-        self::assertSame($value['type'], $instance->type);
+        $instance->setType($value);
+        self::assertNotNull($instance->getType());
+        self::assertNotNull($instance->type);
+        self::assertEquals($value, is_array($value) ? $instance->getType()->toArray() : $instance->getType());
+        self::assertEquals($value, is_array($value) ? $instance->type->toArray() : $instance->type);
     }
 
     /**
+     * Test invalid property "type"
      * @dataProvider invalidTypeDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedException EmptyPropertyValueException
-     *
-     * @param $value
+     * @return void
      */
-    public function testSetInvalidType($value)
-    {
-        $this->getTestInstance()->setType($value);
-    }
-
-    /**
-     * @return array
-     * @throws \Exception
-     */
-    public function validDataProvider()
-    {
-        $result = array();
-        for ($i = 0; $i < 10; $i++) {
-            $result[] = array(
-                'type' => Random::value(SettlementPayoutPaymentType::getValidValues()),
-                'amount' => array(
-                    'value' => sprintf('%.2f', round(Random::float(0.1, 99.99), 2)),
-                    'currency' => Random::value(CurrencyCode::getValidValues())
-                )
-            );
-        }
-        return array($result);
-    }
-
-    /**
-     * @dataProvider validAmountDataProvider
-     *
-     * @param AmountInterface $value
-     */
-    public function testGetSetAmount($value)
+    public function testInvalidType(mixed $value, string $exceptionClass): void
     {
         $instance = $this->getTestInstance();
 
-        self::assertNull($instance->getAmount());
-        self::assertNull($instance->amount);
+        $this->expectException($exceptionClass);
+        $instance->setType($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function validTypeDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_type'));
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidTypeDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_type'));
+    }
+
+    /**
+     * Test property "amount"
+     * @dataProvider validAmountDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testAmount(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
         $instance->setAmount($value);
-        self::assertSame($value, $instance->getAmount());
-        self::assertSame($value, $instance->amount);
+        self::assertNotNull($instance->getAmount());
+        self::assertNotNull($instance->amount);
+        self::assertEquals($value, is_array($value) ? $instance->getAmount()->toArray() : $instance->getAmount());
+        self::assertEquals($value, is_array($value) ? $instance->amount->toArray() : $instance->amount);
     }
 
     /**
-     * @dataProvider validAmountDataProvider
+     * Test invalid property "amount"
+     * @dataProvider invalidAmountDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
      *
-     * @param AmountInterface $value
+     * @return void
      */
-    public function testSetterAmount($value)
+    public function testInvalidAmount(mixed $value, string $exceptionClass): void
     {
         $instance = $this->getTestInstance();
-        $instance->amount = $value;
-        self::assertSame($value, $instance->getAmount());
-        self::assertSame($value, $instance->amount);
-    }
 
-    public function validAmountDataProvider()
-    {
-        return array(
-            array(
-                new MonetaryAmount(
-                    Random::int(1, 100),
-                    Random::value(CurrencyCode::getValidValues())
-                ),
-            ),
-            array(
-                new MonetaryAmount(),
-            ),
-        );
+        $this->expectException($exceptionClass);
+        $instance->setAmount($value);
     }
 
     /**
-     * @dataProvider invalidAmountDataProvider
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedException EmptyPropertyValueException
-     *
-     * @param $value
+     * @return array[]
+     * @throws Exception
      */
-    public function testSetInvalidAmount($value)
+    public function validAmountDataProvider(): array
     {
-        $this->getTestInstance()->setAmount($value);
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_amount'));
     }
 
     /**
-     * @dataProvider invalidAmountDataProvider
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedException EmptyPropertyValueException
-     *
-     * @param $value
+     * @return array[]
+     * @throws Exception
      */
-    public function testSetterInvalidAmount($value)
+    public function invalidAmountDataProvider(): array
     {
-        $this->getTestInstance()->amount = $value;
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_amount'));
     }
-
-    public function invalidAmountDataProvider()
-    {
-        $result = array(
-            array(null),
-            array(''),
-            array(1.0),
-            array(1),
-            array(true),
-            array(false),
-            array(new \stdClass()),
-        );
-
-        return $result;
-    }
-
-    public function invalidTypeDataProvider()
-    {
-        $result = array(
-            array(null),
-            array(''),
-            array(1.0),
-            array(1),
-            array(true),
-            array(false),
-            array(array()),
-            array(new \stdClass()),
-            array(Random::str(1, 10)),
-        );
-
-        return $result;
-    }
-
 }

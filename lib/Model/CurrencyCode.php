@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,26 +29,57 @@ namespace YooKassa\Model;
 use YooKassa\Common\AbstractEnum;
 
 /**
- * CurrencyCode - Код валюты, ISO-4217 3-alpha currency symbol
+ * Класс, представляющий модель CurrencyCode.
+ *
+ * Трехбуквенный код валюты в формате [ISO-4217](https://www.iso.org/iso-4217-currency-codes.html).
+ *
+ * Пример: ~`RUB`. Должен соответствовать валюте субаккаунта (`recipient.gateway_id`),
+ * если вы разделяете потоки платежей, и валюте аккаунта (shopId в [личном кабинете](https://yookassa.ru/my)), если не разделяете.
+ *
+ * @author  cms@yoomoney.ru
  */
 class CurrencyCode extends AbstractEnum
 {
     /** Российский рубль */
-    const RUB = 'RUB';
-    /** Доллар США */
-    const USD = 'USD';
-    /** Евро */
-    const EUR = 'EUR';
-    /** Белорусский рубль */
-    const BYN = 'BYN';
-    /** Китайская йена */
-    const CNY = 'CNY';
-    /** Казахский тенге */
-    const KZT = 'KZT';
-    /** Украинская гривна */
-    const UAH = 'UAH';
+    public const RUB = 'RUB';
 
-    protected static $validValues = array(
+    /** Доллар США */
+    public const USD = 'USD';
+
+    /** Евро */
+    public const EUR = 'EUR';
+
+    /** Белорусский рубль */
+    public const BYN = 'BYN';
+
+    /** Китайская йена */
+    public const CNY = 'CNY';
+
+    /** Казахский тенге */
+    public const KZT = 'KZT';
+
+    /** Украинская гривна */
+    public const UAH = 'UAH';
+
+    /** Узбекский сум */
+    public const UZS = 'UZS';
+
+    /** Турецкая лира */
+    public const _TRY = 'TRY';
+
+    /** Индийская рупия */
+    public const INR = 'INR';
+
+    /** Молдавский лей */
+    public const MDL = 'MDL';
+
+    /** Азербайджанский манат */
+    public const AZN = 'AZN';
+
+    /** Армянский драм */
+    public const AMD = 'AMD';
+
+    protected static array $validValues = [
         self::RUB => true,
         self::USD => true,
         self::EUR => true,
@@ -56,5 +87,11 @@ class CurrencyCode extends AbstractEnum
         self::CNY => true,
         self::KZT => true,
         self::UAH => true,
-    );
+        self::UZS => true,
+        self::_TRY => true,
+        self::INR => true,
+        self::MDL => true,
+        self::AZN => true,
+        self::AMD => true,
+    ];
 }

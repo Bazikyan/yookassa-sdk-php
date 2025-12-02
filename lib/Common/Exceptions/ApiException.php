@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,30 +30,37 @@ use Exception;
 
 /**
  * Неожиданный код ошибки.
- *
- * @package YooKassa
  */
 class ApiException extends Exception
 {
     /**
-     * @var mixed
+     * @var string|null
      */
-    protected $responseBody;
+    protected ?string $responseBody = '';
 
     /**
      * @var string[]
      */
-    protected $responseHeaders;
+    protected array $responseHeaders = [];
+
+    public mixed $type = null;
+
+    public mixed $retryAfter = null;
+
+    private ?string $errorId = null;
+    private ?string $errorCode = null;
+    private ?string $errorDescription = null;
+    private ?string $errorParameter = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $message Error message
      * @param int $code HTTP status code
      * @param string[] $responseHeaders HTTP header
-     * @param mixed $responseBody HTTP body
+     * @param string|null $responseBody HTTP body
      */
-    public function __construct($message = "", $code = 0, $responseHeaders = array(), $responseBody = null)
+    public function __construct(string $message = '', int $code = 0, array $responseHeaders = [], ?string $responseBody = '')
     {
         parent::__construct($message, $code);
         $this->responseHeaders = $responseHeaders;
@@ -63,16 +70,69 @@ class ApiException extends Exception
     /**
      * @return string[]
      */
-    public function getResponseHeaders()
+    public function getResponseHeaders(): array
     {
         return $this->responseHeaders;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getResponseBody()
+    public function getResponseBody(): ?string
     {
         return $this->responseBody;
     }
+
+    protected function parseErrorResponse(mixed $responseBody): string
+    {
+        $errorData = json_decode($responseBody, true);
+        $message = '';
+
+        if (isset($errorData['description'])) {
+            $this->errorDescription = $errorData['description'];
+            $message .= $errorData['description'] . '. ';
+        }
+
+        if (isset($errorData['code'])) {
+            $this->errorCode = $errorData['code'];
+            $message .= sprintf('Error code: %s. ', $errorData['code']);
+        }
+
+        if (isset($errorData['parameter'])) {
+            $this->errorParameter = $errorData['parameter'];
+            $message .= sprintf('Parameter name: %s. ', $errorData['parameter']);
+        }
+
+        if (isset($errorData['retry_after'])) {
+            $this->retryAfter = $errorData['retry_after'];
+        }
+
+        if (isset($errorData['type'])) {
+            $this->type = $errorData['type'];
+        }
+
+        if (isset($errorData['id'])) {
+            $this->errorId = $errorData['id'];
+        }
+
+        return $message;
+    }
+
+    public function getErrorId(): ?string
+    {
+        return $this->errorId;
+    }
+
+    public function getErrorCode(): ?string
+    {
+        return $this->errorCode;
+    }
+
+    public function getErrorDescription(): ?string
+    {
+        return $this->errorDescription;
+    }
+
+    public function getErrorParameter(): ?string
+    {
+        return $this->errorParameter;
+    }
+
 }

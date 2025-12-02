@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,21 +29,33 @@ namespace YooKassa\Model\Deal;
 use YooKassa\Common\AbstractEnum;
 
 /**
- * Class DealStatus
+ * Класс, представляющий модель DealStatus.
  *
- * @package YooKassa
+ * Тип операции. Фиксированное значение:
+ * ~`opened` — Сделка открыта.
+ * ~`closed` — Сделка закрыта.
+ *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  */
 class DealStatus extends AbstractEnum
 {
     /** Сделка открыта. Можно выполнять платежи, возвраты и выплаты в составе сделки */
-    const OPENED = 'opened';
+    public const OPENED = 'opened';
+
     /** Сделка закрыта. Вознаграждение перечислено продавцу и платформе или оплата возвращена покупателю.
      *  Нельзя выполнять платежи, возвраты и выплаты в составе сделки.
      */
-    const CLOSED = 'closed';
+    public const CLOSED = 'closed';
 
-    protected static $validValues = array(
+    /**
+     * Возвращает список доступных значений
+     * @return string[]
+     */
+    protected static array $validValues = [
         self::OPENED => true,
         self::CLOSED => true,
-    );
+    ];
 }

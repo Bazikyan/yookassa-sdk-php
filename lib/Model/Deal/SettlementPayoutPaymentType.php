@@ -1,8 +1,9 @@
 <?php
-/**
+
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +26,29 @@
 
 namespace YooKassa\Model\Deal;
 
-
 use YooKassa\Common\AbstractEnum;
 
+/**
+ * Класс, представляющий модель SettlementPayoutPaymentType.
+ *
+ * Тип операции. Фиксированное значение:
+ * ~`payout` — Выплата продавцу.
+ *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
+ */
 class SettlementPayoutPaymentType extends AbstractEnum
 {
-    const PAYOUT = 'payout';
+    /**  Выплата продавцу */
+    public const PAYOUT = 'payout';
 
-    protected static $validValues = array(
+    /**
+     * Возвращает список доступных значений
+     * @return string[]
+     */
+    protected static array $validValues = [
         self::PAYOUT => true,
-    );
+    ];
 }

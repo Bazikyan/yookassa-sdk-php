@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,23 +26,46 @@
 
 namespace YooKassa\Common;
 
+/**
+ * Класс, представляющий модель HttpVerb.
+ *
+ * Список доступных методов HTTP запроса.
+ *
+ * @category Class
+ * @package  YooKassa
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
+ */
 class HttpVerb extends AbstractEnum
 {
-    const GET = 'GET';
-    const POST = 'POST';
-    const PATCH = 'PATCH';
-    const HEAD = 'HEAD';
-    const OPTIONS = 'OPTIONS';
-    const PUT = 'PUT';
-    const DELETE = 'DELETE';
+    /** Http метод GET */
+    public const GET = 'GET';
 
-    protected static $validValues = array(
+    /** Http метод POST */
+    public const POST = 'POST';
+
+    /** Http метод PATCH */
+    public const PATCH = 'PATCH';
+
+    /** Http метод HEAD */
+    public const HEAD = 'HEAD';
+
+    /** Http метод OPTIONS */
+    public const OPTIONS = 'OPTIONS';
+
+    /** Http метод PUT */
+    public const PUT = 'PUT';
+
+    /** Http метод DELETE */
+    public const DELETE = 'DELETE';
+
+    protected static array $validValues = [
         'GET' => true,
         'POST' => true,
         'PATCH' => true,
         'HEAD' => true,
         'OPTIONS' => true,
         'PUT' => true,
-        'DELETE' => true
-    );
+        'DELETE' => true,
+    ];
 }

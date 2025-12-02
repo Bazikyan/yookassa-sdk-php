@@ -1,8 +1,9 @@
 <?php
-/**
+
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +26,37 @@
 
 namespace YooKassa\Model\Receipt;
 
-
 use YooKassa\Common\AbstractEnum;
 
+/**
+ * SettlementType - Тип расчета.
+ *
+ * Тип расчета передается в запросе на создание чека в массиве `settlements`, в параметре `type`.
+ *
+ * Возможные значения:
+ * - `cashless` - Безналичный расчет
+ * - `prepayment` - Предоплата (аванс)
+ * - `postpayment` - Постоплата (кредит)
+ * - `consideration` - Встречное предоставление
+ */
 class SettlementType extends AbstractEnum
 {
-    const CASHLESS = 'cashless';
-    const PREPAYMENT = 'prepayment';
-    const POSTPAYMENT = 'postpayment';
-    const CONSIDERATION = 'consideration';
+    /** Безналичный расчет */
+    public const CASHLESS = 'cashless';
 
-    protected static $validValues = array(
-        self::CASHLESS      => true,
-        self::PREPAYMENT    => true,
-        self::POSTPAYMENT   => true,
+    /** Предоплата (аванс) */
+    public const PREPAYMENT = 'prepayment';
+
+    /** Постоплата (кредит) */
+    public const POSTPAYMENT = 'postpayment';
+
+    /** Встречное предоставление */
+    public const CONSIDERATION = 'consideration';
+
+    protected static array $validValues = [
+        self::CASHLESS => true,
+        self::PREPAYMENT => true,
+        self::POSTPAYMENT => true,
         self::CONSIDERATION => true,
-    );
+    ];
 }

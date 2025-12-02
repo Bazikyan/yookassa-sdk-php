@@ -6,19 +6,38 @@
 
 * [\YooKassa](../namespaces/yookassa.md)
 
-### Interfaces
+### Constants
 
-| Name | Summary |
-| ---- | ------- |
-| [\JsonSerializable](../classes/JsonSerializable.md) |  |
+<a name="constant_YOOKASSA_SDK_PSR_LOG_PATH" class="anchor"></a>
+###### YOOKASSA_SDK_PSR_LOG_PATH
+```php
+YOOKASSA_SDK_PSR_LOG_PATH = __DIR__ . '/../vendor/psr/log/Psr/Log'
+```
+
+
+| Tag | Version | Desc |
+| --- | ------- | ---- |
+| package |  |  |
+
+<a name="constant_YOOKASSA_SDK_ROOT_PATH" class="anchor"></a>
+###### YOOKASSA_SDK_ROOT_PATH
+```php
+YOOKASSA_SDK_ROOT_PATH = __DIR__
+```
+
+
+| Tag | Version | Desc |
+| --- | ------- | ---- |
+| package |  |  |
+
 
 ### Functions
 
 <a name="method_yookassaSdkLoadClass" class="anchor"></a>
-####  yookassaSdkLoadClass() : mixed
+####  yookassaSdkLoadClass() : void
 
 ```php
- yookassaSdkLoadClass(mixed $className) : mixed
+ yookassaSdkLoadClass(mixed $className) : void
 ```
 
 **Details:**
@@ -29,7 +48,7 @@
 | ---- | ---- | ----------- |
 | <code lang="php">mixed</code> | className  |  |
 
-**Returns:** mixed - 
+**Returns:** void - 
 
 ##### Tags
 | Tag | Version | Description |
@@ -48,10 +67,10 @@
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

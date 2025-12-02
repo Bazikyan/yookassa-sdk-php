@@ -3,6 +3,13 @@
 # Class: \YooKassa\Helpers\UUID
 ### Namespace: [\YooKassa\Helpers](../namespaces/yookassa-helpers.md)
 ---
+**Summary:**
+
+Класс, представляющий модель UUID.
+
+**Description:**
+
+Класс для получения UUID.
 
 ---
 ### Constants
@@ -17,9 +24,19 @@
 ---
 ### Details
 * File: [lib/Helpers/UUID.php](../../lib/Helpers/UUID.php)
-* Package: Default
+* Package: YooKassa\Helpers
 * Class Hierarchy:
   * \YooKassa\Helpers\UUID
+
+* See Also:
+  * [](https://yookassa.ru/developers/api)
+
+---
+### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| category |  | Class |
+| author |  | cms@yoomoney.ru |
 
 ---
 ## Methods
@@ -32,11 +49,6 @@ Static public v4() : string
 
 **Details:**
 * Inherited From: [\YooKassa\Helpers\UUID](../classes/YooKassa-Helpers-UUID.md)
-
-##### Throws:
-| Type | Description |
-| ---- | ----------- |
-| \Exception |  |
 
 **Returns:** string - 
 
@@ -53,10 +65,10 @@ Static public v4() : string
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

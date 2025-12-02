@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,29 +29,31 @@ namespace YooKassa\Model\Payout;
 use YooKassa\Common\AbstractEnum;
 
 /**
- * PayoutCancellationDetailsPartyCode - Возможные инициаторы отмены выплаты
+ * Класс, представляющий модель PayoutCancellationDetailsPartyCode.
+ *
+ * Возможные инициаторы отмены выплаты. Возможные значения:
+ * - `yoo_money` - ЮKassa
+ * - `payout_network` - «Внешние» участники процесса выплаты (например, эмитент, сторонний платежный сервис)
+ *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  */
 class PayoutCancellationDetailsPartyCode extends AbstractEnum
 {
-    /**
-     * Платформа (вы)
-     */
-    const MERCHANT = 'merchant';
+    /** ЮKassa */
+    public const YOO_MONEY = 'yoo_money';
+
+    /** «Внешние» участники процесса выплаты (например, эмитент, сторонний платежный сервис) */
+    public const PAYOUT_NETWORK = 'payout_network';
 
     /**
-     * ЮKassa
+     * Возвращает список доступных значений
+     * @return string[]
      */
-    const YOO_KASSA = 'yoo_kassa';
-
-    /**
-     * «Внешние» участники процесса выплаты (например, эмитент, сторонний платежный сервис)
-     */
-    const PAYMENT_NETWORK = 'payment_network';
-
-
-    protected static $validValues = array(
-        self::MERCHANT        => true,
-        self::YOO_KASSA       => true,
-        self::PAYMENT_NETWORK => true,
-    );
+    protected static array $validValues = [
+        self::YOO_MONEY => true,
+        self::PAYOUT_NETWORK => true,
+    ];
 }

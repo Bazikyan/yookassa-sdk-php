@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,21 +28,15 @@ namespace YooKassa\Common\Exceptions;
 
 /**
  * Запрос был принят на обработку, но она не завершена.
- *
- * @package YooKassa
  */
 class ResponseProcessingException extends ApiException
 {
-    const HTTP_CODE = 202;
+    public const HTTP_CODE = 202;
 
-    public $type;
-
-    public $retryAfter;
-
-    public function __construct($responseHeaders = array(), $responseBody = null)
+    public function __construct(array $responseHeaders = [], ?string $responseBody = '')
     {
         $errorData = json_decode($responseBody, true);
-        $message   = '';
+        $message = '';
 
         if (isset($errorData['description'])) {
             $message .= $errorData['description'] . '. ';

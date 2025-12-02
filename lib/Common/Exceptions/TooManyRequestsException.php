@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,41 +28,14 @@ namespace YooKassa\Common\Exceptions;
 
 /**
  * Превышен лимит запросов в единицу времени. Попробуйте снизить интенсивность запросов.
- *
- * @package YooKassa
  */
 class TooManyRequestsException extends ApiException
 {
-    const HTTP_CODE = 429;
+    public const HTTP_CODE = 429;
 
-    public $type;
-
-    public $retryAfter;
-
-    public function __construct($responseHeaders = array(), $responseBody = null)
+    public function __construct(array $responseHeaders = [], ?string $responseBody = '')
     {
-        $errorData = json_decode($responseBody, true);
-        $message   = '';
-
-        if (isset($errorData['description'])) {
-            $message .= $errorData['description'] . '. ';
-        }
-
-        if (isset($errorData['code'])) {
-            $message .= sprintf('Error code: %s. ', $errorData['code']);
-        }
-
-        if (isset($errorData['parameter'])) {
-            $message .= sprintf('Parameter name: %s. ', $errorData['parameter']);
-        }
-
-        if (isset($errorData['retry_after'])) {
-            $this->retryAfter = $errorData['retry_after'];
-        }
-
-        if (isset($errorData['type'])) {
-            $this->type = $errorData['type'];
-        }
+        $message = $this->parseErrorResponse($responseBody);
 
         parent::__construct(trim($message), self::HTTP_CODE, $responseHeaders, $responseBody);
     }

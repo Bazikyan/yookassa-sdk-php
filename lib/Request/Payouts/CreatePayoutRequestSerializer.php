@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,44 +27,26 @@
 namespace YooKassa\Request\Payouts;
 
 /**
- * Класс сериалайзера объекта запроса к API на проведение выплаты
+ * Класс, представляющий модель CreatePayoutRequestSerializer.
  *
- * @package YooKassa
+ * Класс объекта осуществляющего сериализацию объекта запроса к API на проведение выплаты.
+ *
+ * @category Class
+ * @package  YooKassa\Request
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  */
 class CreatePayoutRequestSerializer
 {
     /**
-     * Формирует ассоциативный массив данных из объекта запроса
+     * Формирует ассоциативный массив данных из объекта запроса.
      *
      * @param CreatePayoutRequestInterface $request Объект запроса
+     *
      * @return array Массив данных для дальнейшего кодирования в JSON
      */
-    public function serialize(CreatePayoutRequestInterface $request)
+    public function serialize(CreatePayoutRequestInterface $request): array
     {
-        $result = array();
-
-        if ($request->getAmount()->getValue() > 0) {
-            $result['amount'] = $request->getAmount()->toArray();
-        }
-        if ($request->hasPayoutDestinationData()) {
-            $result['payout_destination_data'] = $request->getPayoutDestinationData()->toArray();
-        }
-        if ($request->hasPayoutToken()) {
-            $result['payout_token'] = $request->getPayoutToken();
-        }
-        if ($request->hasMetadata()) {
-            $result['metadata'] = $request->getMetadata()->toArray();
-        }
-        if ($request->hasDescription()) {
-            $result['description'] = $request->getDescription();
-        }
-        if ($request->hasDeal()) {
-            $result['deal'] = $request->getDeal()->toArray();
-        }
-        if ($request->hasMetadata()) {
-            $result['metadata'] = $request->getMetadata()->toArray();
-        }
-
-        return $result;
+        return $request->toArray();
     }
 }

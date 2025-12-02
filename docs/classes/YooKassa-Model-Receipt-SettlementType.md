@@ -5,17 +5,26 @@
 ---
 **Summary:**
 
-Базовый класс генерируемых enum'ов
+SettlementType - Тип расчета.
 
+**Description:**
+
+Тип расчета передается в запросе на создание чека в массиве `settlements`, в параметре `type`.
+
+Возможные значения:
+- `cashless` - Безналичный расчет
+- `prepayment` - Предоплата (аванс)
+- `postpayment` - Постоплата (кредит)
+- `consideration` - Встречное предоставление
 
 ---
 ### Constants
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [CASHLESS](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_CASHLESS) |  |  |
-| public | [PREPAYMENT](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_PREPAYMENT) |  |  |
-| public | [POSTPAYMENT](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_POSTPAYMENT) |  |  |
-| public | [CONSIDERATION](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_CONSIDERATION) |  |  |
+| public | [CASHLESS](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_CASHLESS) |  | Безналичный расчет |
+| public | [PREPAYMENT](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_PREPAYMENT) |  | Предоплата (аванс) |
+| public | [POSTPAYMENT](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_POSTPAYMENT) |  | Постоплата (кредит) |
+| public | [CONSIDERATION](../classes/YooKassa-Model-Receipt-SettlementType.md#constant_CONSIDERATION) |  | Встречное предоставление |
 
 ---
 ### Properties
@@ -27,9 +36,9 @@
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [getEnabledValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getEnabledValues) |  | Возвращает значения в enum'е значения которых разрешены |
-| public | [getValidValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getValidValues) |  | Возвращает все значения в enum'e |
-| public | [valueExists()](../classes/YooKassa-Common-AbstractEnum.md#method_valueExists) |  | Проверяет наличие значения в enum'e |
+| public | [getEnabledValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getEnabledValues) |  | Возвращает значения в enum'е значения которых разрешены. |
+| public | [getValidValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getValidValues) |  | Возвращает все значения в enum'e. |
+| public | [valueExists()](../classes/YooKassa-Common-AbstractEnum.md#method_valueExists) |  | Проверяет наличие значения в enum'e. |
 
 ---
 ### Details
@@ -43,6 +52,8 @@
 ## Constants
 <a name="constant_CASHLESS" class="anchor"></a>
 ###### CASHLESS
+Безналичный расчет
+
 ```php
 CASHLESS = 'cashless'
 ```
@@ -50,6 +61,8 @@ CASHLESS = 'cashless'
 
 <a name="constant_PREPAYMENT" class="anchor"></a>
 ###### PREPAYMENT
+Предоплата (аванс)
+
 ```php
 PREPAYMENT = 'prepayment'
 ```
@@ -57,6 +70,8 @@ PREPAYMENT = 'prepayment'
 
 <a name="constant_POSTPAYMENT" class="anchor"></a>
 ###### POSTPAYMENT
+Постоплата (кредит)
+
 ```php
 POSTPAYMENT = 'postpayment'
 ```
@@ -64,6 +79,8 @@ POSTPAYMENT = 'postpayment'
 
 <a name="constant_CONSIDERATION" class="anchor"></a>
 ###### CONSIDERATION
+Встречное предоставление
+
 ```php
 CONSIDERATION = 'consideration'
 ```
@@ -92,7 +109,7 @@ Static public getEnabledValues() : string[]
 
 **Summary**
 
-Возвращает значения в enum'е значения которых разрешены
+Возвращает значения в enum'е значения которых разрешены.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -109,7 +126,7 @@ Static public getValidValues() : array
 
 **Summary**
 
-Возвращает все значения в enum'e
+Возвращает все значения в enum'e.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -126,7 +143,7 @@ Static public valueExists(mixed $value) : bool
 
 **Summary**
 
-Проверяет наличие значения в enum'e
+Проверяет наличие значения в enum'e.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -151,10 +168,10 @@ Static public valueExists(mixed $value) : bool
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

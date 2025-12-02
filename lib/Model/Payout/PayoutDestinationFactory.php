@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,55 +26,60 @@
 
 namespace YooKassa\Model\Payout;
 
-use YooKassa\Model\PaymentMethodType;
+use InvalidArgumentException;
+use YooKassa\Model\Payment\PaymentMethodType;
 
 /**
- * Фабрика создания объекта платежных методов из массива
+ * Класс, представляющий модель PayoutDestinationFactory.
  *
- * @package YooKassa
+ * Фабрика создания объекта платежных методов из массива.
+ *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
  */
 class PayoutDestinationFactory
 {
-    private $typeClassMap = array(
+    /**
+     * @var string[]
+     */
+    private array $typeClassMap = [
         PaymentMethodType::YOO_MONEY => 'PayoutDestinationYooMoney',
         PaymentMethodType::BANK_CARD => 'PayoutDestinationBankCard',
-    );
+        PaymentMethodType::SBP => 'PayoutDestinationSbp',
+    ];
 
     /**
-     * Фабричный метод создания объекта платежных данных по типу
-     * @param string $type Тип платежных данных
+     * Фабричный метод создания объекта платежных данных по типу.
      *
+     * @param string|null $type Тип платежных данных
      * @return AbstractPayoutDestination
      */
-    public function factory($type)
+    public function factory(?string $type): AbstractPayoutDestination
     {
-        if (!is_string($type)) {
-            throw new \InvalidArgumentException('Invalid payment type value in payment factory');
-        }
         if (!array_key_exists($type, $this->typeClassMap)) {
-            throw new \InvalidArgumentException('Invalid payment data type "'.$type.'"');
+            throw new InvalidArgumentException('Invalid payment data type "' . $type . '"');
         }
-        $className = __NAMESPACE__.'\\'.$this->typeClassMap[$type];
+        $className = __NAMESPACE__ . '\\' . $this->typeClassMap[$type];
 
         return new $className();
     }
 
     /**
-     * Фабричный метод создания объекта платежных данных из массива
+     * Фабричный метод создания объекта платежных данных из массива.
      *
      * @param array $data Массив платежных данных
-     * @param string|null $type Тип платежных данных
-     *
-     * @return AbstractPayoutDestination
+     * @param null|string $type Тип платежных данных
      */
-    public function factoryFromArray(array $data, $type = null)
+    public function factoryFromArray(array $data, ?string $type = null): AbstractPayoutDestination
     {
-        if ($type === null) {
+        if (null === $type) {
             if (array_key_exists('type', $data)) {
                 $type = $data['type'];
                 unset($data['type']);
             } else {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Parameter type not specified in PaymentDataFactory.factoryFromArray()'
                 );
             }

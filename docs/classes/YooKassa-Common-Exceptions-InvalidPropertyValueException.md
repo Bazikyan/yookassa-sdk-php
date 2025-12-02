@@ -31,7 +31,7 @@
 #### public __construct() : mixed
 
 ```php
-public __construct(string $message = &#039;&#039;, int $code, string $property = &#039;&#039;, mixed $value = null) : mixed
+public __construct(string $message = &#039;&#039;, int $code, string $property = &#039;&#039;, mixed|null $value = null) : mixed
 ```
 
 **Summary**
@@ -47,7 +47,7 @@ InvalidPropertyValueTypeException constructor.
 | <code lang="php">string</code> | message  |  |
 | <code lang="php">int</code> | code  |  |
 | <code lang="php">string</code> | property  |  |
-| <code lang="php">mixed</code> | value  |  |
+| <code lang="php">mixed OR null</code> | value  |  |
 
 **Returns:** mixed - 
 
@@ -90,10 +90,10 @@ public getValue() : mixed
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

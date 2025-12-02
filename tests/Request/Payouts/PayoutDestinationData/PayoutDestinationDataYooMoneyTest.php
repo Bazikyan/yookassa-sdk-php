@@ -1,109 +1,164 @@
 <?php
 
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
+
 namespace Tests\YooKassa\Request\Payouts\PayoutDestinationData;
 
-use YooKassa\Helpers\Random;
-use YooKassa\Model\PaymentMethodType;
+use Exception;
+use Tests\YooKassa\AbstractTestCase;
+use Datetime;
+use YooKassa\Model\Metadata;
 use YooKassa\Request\Payouts\PayoutDestinationData\PayoutDestinationDataYooMoney;
 
-class PayoutDestinationDataYooMoneyTest extends AbstractPayoutDestinationDataTest
+/**
+ * PayoutDestinationDataYooMoneyTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
+class PayoutDestinationDataYooMoneyTest extends AbstractTestCase
 {
+    protected PayoutDestinationDataYooMoney $object;
+
     /**
      * @return PayoutDestinationDataYooMoney
      */
-    protected function getTestInstance()
+    protected function getTestInstance(): PayoutDestinationDataYooMoney
     {
         return new PayoutDestinationDataYooMoney();
     }
 
     /**
-     * @return string
+     * @return void
      */
-    protected function getExpectedType()
+    public function testPayoutDestinationDataYooMoneyClassExists(): void
     {
-        return PaymentMethodType::YOO_MONEY;
+        $this->object = $this->getMockBuilder(PayoutDestinationDataYooMoney::class)->getMockForAbstractClass();
+        $this->assertTrue(class_exists(PayoutDestinationDataYooMoney::class));
+        $this->assertInstanceOf(PayoutDestinationDataYooMoney::class, $this->object);
     }
 
     /**
+     * Test property "type"
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testType(): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertNotNull($instance->getType());
+        self::assertNotNull($instance->type);
+        self::assertContains($instance->getType(), ['yoo_money']);
+        self::assertContains($instance->type, ['yoo_money']);
+    }
+
+    /**
+     * Test invalid property "type"
+     * @dataProvider invalidTypeDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidType(mixed $value, string $exceptionClass): void
+    {
+        $instance = $this->getTestInstance();
+
+        $this->expectException($exceptionClass);
+        $instance->setType($value);
+    }
+
+    /**
+     * @return array[]
+     * @throws Exception
+     */
+    public function invalidTypeDataProvider(): array
+    {
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_type'));
+    }
+
+    /**
+     * Test property "account_number"
      * @dataProvider validAccountNumberDataProvider
-     * @param string $value
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
      */
-    public function testGetSetAccountNumber($value)
+    public function testAccountNumber(mixed $value): void
     {
         $instance = $this->getTestInstance();
-
-        self::assertNull($instance->getAccountNumber());
-        self::assertNull($instance->accountNumber);
-        self::assertNull($instance->account_number);
-
         $instance->setAccountNumber($value);
-        if ($value === null || $value === '' || $value === array()) {
-            self::assertNull($instance->getAccountNumber());
-            self::assertNull($instance->accountNumber);
-            self::assertNull($instance->account_number);
-        } else {
-            $expected = $value;
-            self::assertEquals($expected, $instance->getAccountNumber());
-            self::assertEquals($expected, $instance->accountNumber);
-            self::assertEquals($expected, $instance->account_number);
-        }
+        self::assertNotNull($instance->getAccountNumber());
+        self::assertNotNull($instance->account_number);
+        self::assertEquals($value, is_array($value) ? $instance->getAccountNumber()->toArray() : $instance->getAccountNumber());
+        self::assertEquals($value, is_array($value) ? $instance->account_number->toArray() : $instance->account_number);
+        self::assertLessThanOrEqual(33, is_string($instance->getAccountNumber()) ? mb_strlen($instance->getAccountNumber()) : $instance->getAccountNumber());
+        self::assertLessThanOrEqual(33, is_string($instance->account_number) ? mb_strlen($instance->account_number) : $instance->account_number);
+        self::assertGreaterThanOrEqual(11, is_string($instance->getAccountNumber()) ? mb_strlen($instance->getAccountNumber()) : $instance->getAccountNumber());
+        self::assertGreaterThanOrEqual(11, is_string($instance->account_number) ? mb_strlen($instance->account_number) : $instance->account_number);
+        self::assertMatchesRegularExpression("/^[0-9]{11,33}$/", $instance->getAccountNumber());
+        self::assertMatchesRegularExpression("/^[0-9]{11,33}$/", $instance->account_number);
+    }
 
+    /**
+     * Test invalid property "account_number"
+     * @dataProvider invalidAccountNumberDataProvider
+     * @param mixed $value
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    public function testInvalidAccountNumber(mixed $value, string $exceptionClass): void
+    {
         $instance = $this->getTestInstance();
-        $instance->account_number = $value;
-        if ($value === null || $value === '' || $value === array()) {
-            self::assertNull($instance->getAccountNumber());
-            self::assertNull($instance->accountNumber);
-            self::assertNull($instance->account_number);
-        } else {
-            $expected = $value;
-            self::assertEquals($expected, $instance->getAccountNumber());
-            self::assertEquals($expected, $instance->accountNumber);
-            self::assertEquals($expected, $instance->account_number);
-        }
+
+        $this->expectException($exceptionClass);
+        $instance->setAccountNumber($value);
     }
 
     /**
-     * @dataProvider invalidAccountNumberDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
+     * @return array[]
+     * @throws Exception
      */
-    public function testSetInvalidAccountNumber($value)
+    public function validAccountNumberDataProvider(): array
     {
-        $this->getTestInstance()->setAccountNumber($value);
-
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_account_number'));
     }
 
     /**
-     * @dataProvider invalidAccountNumberDataProvider
-     * @expectedException \InvalidArgumentException
-     * @param mixed $value
+     * @return array[]
+     * @throws Exception
      */
-    public function testSetterInvalidAccountNumber($value)
+    public function invalidAccountNumberDataProvider(): array
     {
-        $this->getTestInstance()->account_number = $value;
-    }
-
-    public function validAccountNumberDataProvider()
-    {
-        return array(
-            array(1234567894560),
-            array('0123456789456'),
-            array(Random::str(11, 33, '0123456789')),
-        );
-    }
-
-    public function invalidAccountNumberDataProvider()
-    {
-        return array(
-            array(0),
-            array(array()),
-            array(''),
-            array(null),
-            array(Random::str(34, 50, '0123456789')),
-            array(true),
-            array(new \stdClass()),
-            array(new \Datetime()),
-            array(Random::str(1, 10, '0123456789')),
-        );
+        $instance = $this->getTestInstance();
+        return $this->getInvalidDataProviderByType($instance->getValidator()->getRulesByPropName('_account_number'));
     }
 }

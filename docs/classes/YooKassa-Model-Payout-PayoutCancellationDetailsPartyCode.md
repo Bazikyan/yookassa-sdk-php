@@ -5,65 +5,70 @@
 ---
 **Summary:**
 
-PayoutCancellationDetailsPartyCode - Возможные инициаторы отмены выплаты
+Класс, представляющий модель PayoutCancellationDetailsPartyCode.
 
+**Description:**
+
+Возможные инициаторы отмены выплаты. Возможные значения:
+- `yoo_money` - ЮKassa
+- `payout_network` - «Внешние» участники процесса выплаты (например, эмитент, сторонний платежный сервис)
 
 ---
 ### Constants
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [MERCHANT](../classes/YooKassa-Model-Payout-PayoutCancellationDetailsPartyCode.md#constant_MERCHANT) |  | Платформа (вы) |
-| public | [YOO_KASSA](../classes/YooKassa-Model-Payout-PayoutCancellationDetailsPartyCode.md#constant_YOO_KASSA) |  | ЮKassa |
-| public | [PAYMENT_NETWORK](../classes/YooKassa-Model-Payout-PayoutCancellationDetailsPartyCode.md#constant_PAYMENT_NETWORK) |  | «Внешние» участники процесса выплаты (например, эмитент, сторонний платежный сервис) |
+| public | [YOO_MONEY](../classes/YooKassa-Model-Payout-PayoutCancellationDetailsPartyCode.md#constant_YOO_MONEY) |  | ЮKassa |
+| public | [PAYOUT_NETWORK](../classes/YooKassa-Model-Payout-PayoutCancellationDetailsPartyCode.md#constant_PAYOUT_NETWORK) |  | «Внешние» участники процесса выплаты (например, эмитент, сторонний платежный сервис) |
 
 ---
 ### Properties
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| protected | [$validValues](../classes/YooKassa-Model-Payout-PayoutCancellationDetailsPartyCode.md#property_validValues) |  |  |
+| protected | [$validValues](../classes/YooKassa-Model-Payout-PayoutCancellationDetailsPartyCode.md#property_validValues) |  | Возвращает список доступных значений |
 
 ---
 ### Methods
 | Visibility | Name | Flag | Summary |
 | ----------:| ---- | ---- | ------- |
-| public | [getEnabledValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getEnabledValues) |  | Возвращает значения в enum'е значения которых разрешены |
-| public | [getValidValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getValidValues) |  | Возвращает все значения в enum'e |
-| public | [valueExists()](../classes/YooKassa-Common-AbstractEnum.md#method_valueExists) |  | Проверяет наличие значения в enum'e |
+| public | [getEnabledValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getEnabledValues) |  | Возвращает значения в enum'е значения которых разрешены. |
+| public | [getValidValues()](../classes/YooKassa-Common-AbstractEnum.md#method_getValidValues) |  | Возвращает все значения в enum'e. |
+| public | [valueExists()](../classes/YooKassa-Common-AbstractEnum.md#method_valueExists) |  | Проверяет наличие значения в enum'e. |
 
 ---
 ### Details
 * File: [lib/Model/Payout/PayoutCancellationDetailsPartyCode.php](../../lib/Model/Payout/PayoutCancellationDetailsPartyCode.php)
-* Package: Default
+* Package: YooKassa\Model
 * Class Hierarchy: 
   * [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
   * \YooKassa\Model\Payout\PayoutCancellationDetailsPartyCode
 
+* See Also:
+  * [](https://yookassa.ru/developers/api)
+
+---
+### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| category |  | Class |
+| author |  | cms@yoomoney.ru |
+
 ---
 ## Constants
-<a name="constant_MERCHANT" class="anchor"></a>
-###### MERCHANT
-Платформа (вы)
-
-```php
-MERCHANT = 'merchant'
-```
-
-
-<a name="constant_YOO_KASSA" class="anchor"></a>
-###### YOO_KASSA
+<a name="constant_YOO_MONEY" class="anchor"></a>
+###### YOO_MONEY
 ЮKassa
 
 ```php
-YOO_KASSA = 'yoo_kassa'
+YOO_MONEY = 'yoo_money'
 ```
 
 
-<a name="constant_PAYMENT_NETWORK" class="anchor"></a>
-###### PAYMENT_NETWORK
+<a name="constant_PAYOUT_NETWORK" class="anchor"></a>
+###### PAYOUT_NETWORK
 «Внешние» участники процесса выплаты (например, эмитент, сторонний платежный сервис)
 
 ```php
-PAYMENT_NETWORK = 'payment_network'
+PAYOUT_NETWORK = 'payout_network'
 ```
 
 
@@ -73,10 +78,19 @@ PAYMENT_NETWORK = 'payment_network'
 <a name="property_validValues"></a>
 #### protected $validValues : array
 ---
+**Summary**
+
+Возвращает список доступных значений
+
 **Type:** <a href="../array"><abbr title="array">array</abbr></a>
 Массив принимаемых enum&#039;ом значений
 **Details:**
 
+
+##### Tags
+| Tag | Version | Description |
+| --- | ------- | ----------- |
+| return |  |  |
 
 
 ---
@@ -90,7 +104,7 @@ Static public getEnabledValues() : string[]
 
 **Summary**
 
-Возвращает значения в enum'е значения которых разрешены
+Возвращает значения в enum'е значения которых разрешены.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -107,7 +121,7 @@ Static public getValidValues() : array
 
 **Summary**
 
-Возвращает все значения в enum'e
+Возвращает все значения в enum'e.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -124,7 +138,7 @@ Static public valueExists(mixed $value) : bool
 
 **Summary**
 
-Проверяет наличие значения в enum'e
+Проверяет наличие значения в enum'e.
 
 **Details:**
 * Inherited From: [\YooKassa\Common\AbstractEnum](../classes/YooKassa-Common-AbstractEnum.md)
@@ -149,10 +163,10 @@ Static public valueExists(mixed $value) : bool
 ### Reports
 * [Errors - 0](../reports/errors.md)
 * [Markers - 0](../reports/markers.md)
-* [Deprecated - 13](../reports/deprecated.md)
+* [Deprecated - 32](../reports/deprecated.md)
 
 ---
 
-This document was automatically generated from source code comments on 2022-03-22 using [phpDocumentor](http://www.phpdoc.org/)
+This document was automatically generated from source code comments on 2025-01-17 using [phpDocumentor](http://www.phpdoc.org/)
 
-&copy; 2022 YooMoney
+&copy; 2025 YooMoney

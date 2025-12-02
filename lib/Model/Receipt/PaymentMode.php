@@ -1,8 +1,9 @@
 <?php
-/**
+
+/*
  * The MIT License
  *
- * Copyright (c) 2022 "YooMoney", NBСO LLC
+ * Copyright (c) 2025 "YooMoney", NBСO LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +26,48 @@
 
 namespace YooKassa\Model\Receipt;
 
-
 use YooKassa\Common\AbstractEnum;
 
+/**
+ * Класс, представляющий модель PaymentMode.
+ *
+ * Признак способа расчета (тег в 54 ФЗ — 1214) — отражает тип оплаты и факт передачи товара.
+ *
+ * @category Class
+ * @package  YooKassa\Model
+ * @author   cms@yoomoney.ru
+ * @link     https://yookassa.ru/developers/api
+ */
 class PaymentMode extends AbstractEnum
 {
-    const FULL_PREPAYMENT = 'full_prepayment';
-    const PARTIAL_PREPAYMENT = 'partial_prepayment';
-    const ADVANCE = 'advance';
-    const FULL_PAYMENT = 'full_payment';
-    const PARTIAL_PAYMENT = 'partial_payment';
-    const CREDIT = 'credit';
-    const CREDIT_PAYMENT = 'credit_payment';
+    /** Полная предоплата */
+    public const FULL_PREPAYMENT = 'full_prepayment';
 
-    protected static $validValues = array(
-        self::FULL_PREPAYMENT    => true,
+    /** Частичная предоплата */
+    public const PARTIAL_PREPAYMENT = 'partial_prepayment';
+
+    /** Аванс */
+    public const ADVANCE = 'advance';
+
+    /** Полный расчет */
+    public const FULL_PAYMENT = 'full_payment';
+
+    /** Частичный расчет и кредит */
+    public const PARTIAL_PAYMENT = 'partial_payment';
+
+    /** Кредит */
+    public const CREDIT = 'credit';
+
+    /** Выплата по кредиту */
+    public const CREDIT_PAYMENT = 'credit_payment';
+
+    protected static array $validValues = [
+        self::FULL_PREPAYMENT => true,
         self::PARTIAL_PREPAYMENT => true,
-        self::ADVANCE            => true,
-        self::FULL_PAYMENT       => true,
-        self::PARTIAL_PAYMENT    => true,
-        self::CREDIT             => true,
-        self::CREDIT_PAYMENT     => true,
-    );
+        self::ADVANCE => true,
+        self::FULL_PAYMENT => true,
+        self::PARTIAL_PAYMENT => true,
+        self::CREDIT => true,
+        self::CREDIT_PAYMENT => true,
+    ];
 }

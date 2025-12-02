@@ -1,21 +1,53 @@
 <?php
 
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
+
 namespace Tests\YooKassa\Request\Receipts;
 
+use PHPUnit\Framework\TestCase;
 use YooKassa\Helpers\Random;
-use YooKassa\Model\ReceiptRegistrationStatus;
-use YooKassa\Model\RefundStatus;
+use YooKassa\Model\Payment\ReceiptRegistrationStatus;
+use YooKassa\Model\Refund\RefundStatus;
 use YooKassa\Request\Receipts\ReceiptsRequest;
 use YooKassa\Request\Receipts\ReceiptsRequestBuilder;
-use PHPUnit\Framework\TestCase;
 
+/**
+ * ReceiptsRequestBuilderTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
 class ReceiptsRequestBuilderTest extends TestCase
 {
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetRefundId($value)
+    public function testSetRefundId(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setRefundId($value['refundId']);
@@ -24,16 +56,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasRefundId());
         } else {
             self::assertTrue($instance->hasRefundId());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['refundId'], $instance->getRefundId());
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetPaymentId($value)
+    public function testSetPaymentId(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setPaymentId($value['paymentId']);
@@ -42,16 +75,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasPaymentId());
         } else {
             self::assertTrue($instance->hasPaymentId());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['paymentId'], $instance->getPaymentId());
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetStatus($value)
+    public function testSetStatus(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setStatus($value['status']);
@@ -60,16 +94,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasStatus());
         } else {
             self::assertTrue($instance->hasStatus());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['status'], $instance->getStatus());
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetLimit($value)
+    public function testSetLimit(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setLimit($value['limit']);
@@ -78,16 +113,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasLimit());
         } else {
             self::assertTrue($instance->hasLimit());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['limit'], $instance->getLimit());
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetCursor($value)
+    public function testSetCursor(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setCursor($value['cursor']);
@@ -96,16 +132,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasCursor());
         } else {
             self::assertTrue($instance->hasCursor());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['cursor'], $instance->getCursor());
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetCreatedAtGt($value)
+    public function testSetCreatedAtGt(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setCreatedAtGt($value['createdAtGt']);
@@ -114,16 +151,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasCreatedAtGt());
         } else {
             self::assertTrue($instance->hasCreatedAtGt());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['createdAtGt'], $instance->getCreatedAtGt()->format(YOOKASSA_DATE));
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetCreatedAtGte($value)
+    public function testSetCreatedAtGte(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setCreatedAtGte($value['createdAtGte']);
@@ -132,16 +170,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasCreatedAtGte());
         } else {
             self::assertTrue($instance->hasCreatedAtGte());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['createdAtGte'], $instance->getCreatedAtGte()->format(YOOKASSA_DATE));
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetCreatedAtLt($value)
+    public function testSetCreatedAtLt(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setCreatedAtLt($value['createdAtLt']);
@@ -150,16 +189,17 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasCreatedAtLt());
         } else {
             self::assertTrue($instance->hasCreatedAtLt());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['createdAtLt'], $instance->getCreatedAtLt()->format(YOOKASSA_DATE));
         }
     }
 
     /**
      * @dataProvider validDataProvider
-     * @param $value
+     *
+     * @param mixed $value
      */
-    public function testSetCreatedAtLte($value)
+    public function testSetCreatedAtLte(mixed $value): void
     {
         $builder = new ReceiptsRequestBuilder();
         $builder->setCreatedAtLte($value['createdAtLte']);
@@ -168,42 +208,43 @@ class ReceiptsRequestBuilderTest extends TestCase
             self::assertFalse($instance->hasCreatedAtLte());
         } else {
             self::assertTrue($instance->hasCreatedAtLte());
-            self::assertTrue($instance instanceof ReceiptsRequest);
+            self::assertInstanceOf(ReceiptsRequest::class, $instance);
             self::assertEquals($value['createdAtLte'], $instance->getCreatedAtLte()->format(YOOKASSA_DATE));
         }
     }
 
-    public function validDataProvider()
+    public static function validDataProvider(): array
     {
-        $result = array(
-            array(
-                array(
+        $result = [
+            [
+                [
                     'paymentId' => '216749da-000f-50be-b000-096747fad91e',
                     'refundId' => '216749f7-0016-50be-b000-078d43a63ae4',
                     'status' => RefundStatus::SUCCEEDED,
                     'limit' => 100,
                     'cursor' => '37a5c87d-3984-51e8-a7f3-8de646d39ec15',
-                    'createdAtGte' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                    'createdAtGt' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                    'createdAtLte' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                    'createdAtLt' => date(YOOKASSA_DATE, mt_rand(1, time())),
-                )
-            ),
-        );
+                    'createdAtGte' => date(YOOKASSA_DATE, Random::int(1, time())),
+                    'createdAtGt' => date(YOOKASSA_DATE, Random::int(1, time())),
+                    'createdAtLte' => date(YOOKASSA_DATE, Random::int(1, time())),
+                    'createdAtLt' => date(YOOKASSA_DATE, Random::int(1, time())),
+                ],
+            ],
+        ];
         for ($i = 0; $i < 8; $i++) {
-            $receipts = array(
+            $receipts = [
                 'paymentId' => Random::str(36),
                 'refundId' => Random::str(36),
-                'createdAtGte' => ($i == 0 ? null : ($i == 1 ? '' : date(YOOKASSA_DATE, mt_rand(1, time())))),
-                'createdAtGt' => ($i == 0 ? null : ($i == 1 ? '' : date(YOOKASSA_DATE, mt_rand(1, time())))),
-                'createdAtLte' => ($i == 0 ? null : ($i == 1 ? '' : date(YOOKASSA_DATE, mt_rand(1, time())))),
-                'createdAtLt' => ($i == 0 ? null : ($i == 1 ? '' : date(YOOKASSA_DATE, mt_rand(1, time())))),
+                'createdAtGte' => (0 === $i ? null : (1 === $i ? '' : date(YOOKASSA_DATE, Random::int(1, time())))),
+                'createdAtGt' => (0 === $i ? null : (1 === $i ? '' : date(YOOKASSA_DATE, Random::int(1, time())))),
+                'createdAtLte' => (0 === $i ? null : (1 === $i ? '' : date(YOOKASSA_DATE, Random::int(1, time())))),
+                'createdAtLt' => (0 === $i ? null : (1 === $i ? '' : date(YOOKASSA_DATE, Random::int(1, time())))),
                 'status' => Random::value(ReceiptRegistrationStatus::getValidValues()),
-                'cursor' => uniqid(),
-                'limit' => mt_rand(1, ReceiptsRequest::MAX_LIMIT_VALUE),
-            );
-            $result[] = array($receipts);
+                'cursor' => uniqid('', true),
+                'limit' => Random::int(1, ReceiptsRequest::MAX_LIMIT_VALUE),
+            ];
+            $result[] = [$receipts];
         }
+
         return $result;
     }
 }

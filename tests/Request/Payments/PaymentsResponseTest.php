@@ -1,302 +1,128 @@
 <?php
 
+/*
+* The MIT License
+*
+* Copyright (c) 2024 "YooMoney", NBСO LLC
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*/
+
 namespace Tests\YooKassa\Request\Payments;
 
-use PHPUnit\Framework\TestCase;
-use YooKassa\Helpers\Random;
-use YooKassa\Model\CancellationDetailsPartyCode;
-use YooKassa\Model\CancellationDetailsReasonCode;
-use YooKassa\Model\ConfirmationType;
-use YooKassa\Model\CurrencyCode;
-use YooKassa\Model\PaymentInterface;
-use YooKassa\Model\PaymentMethodType;
-use YooKassa\Model\PaymentStatus;
-use YooKassa\Model\ReceiptRegistrationStatus;
+use Exception;
+use Tests\YooKassa\AbstractTestCase;
+use Datetime;
+use YooKassa\Model\Deal\SafeDeal;
+use YooKassa\Model\Metadata;
+use YooKassa\Request\Deals\DealsResponse;
 use YooKassa\Request\Payments\PaymentsResponse;
 
-class PaymentsResponseTest extends TestCase
+/**
+ * PaymentsResponseTest
+ *
+ * @category    ClassTest
+ * @author      cms@yoomoney.ru
+ * @link        https://yookassa.ru/developers/api
+ */
+class PaymentsResponseTest extends AbstractTestCase
 {
+    protected PaymentsResponse $object;
+
     /**
-     * @dataProvider validDataProvider
-     * @param array $options
+     * @param mixed|null $value
+     * @return PaymentsResponse
      */
-    public function testGetItems($options)
+    protected function getTestInstance(mixed $value = null): PaymentsResponse
     {
-        $instance = new PaymentsResponse($options);
-        self::assertEquals(count($options['items']), count($instance->getItems()));
-        foreach ($instance->getItems() as $index => $item) {
-            self::assertTrue($item instanceof PaymentInterface);
-            self::assertArrayHasKey($index, $options['items']);
-            self::assertEquals($options['items'][$index]['id'], $item->getId());
-            self::assertEquals($options['items'][$index]['status'], $item->getStatus());
-            self::assertEquals($options['items'][$index]['amount']['value'], $item->getAmount()->getValue());
-            self::assertEquals($options['items'][$index]['amount']['currency'], $item->getAmount()->getCurrency());
-            self::assertEquals($options['items'][$index]['created_at'], $item->getCreatedAt()->format(YOOKASSA_DATE));
-            self::assertEquals($options['items'][$index]['payment_method']['type'], $item->getPaymentMethod()->getType());
-            self::assertEquals($options['items'][$index]['paid'], $item->getPaid());
-            self::assertEquals($options['items'][$index]['refundable'], $item->getRefundable());
+        return new PaymentsResponse($value);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPaymentsResponseClassExists(): void
+    {
+        $this->object = $this->getMockBuilder(PaymentsResponse::class)->getMockForAbstractClass();
+        $this->assertTrue(class_exists(PaymentsResponse::class));
+        $this->assertInstanceOf(PaymentsResponse::class, $this->object);
+    }
+
+    /**
+     * Test property "items"
+     * @dataProvider validClassDataProvider
+     * @param mixed $value
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testItems(mixed $value): void
+    {
+        $instance = $this->getTestInstance();
+        self::assertIsObject($instance->getItems());
+        self::assertIsObject($instance->items);
+        self::assertNotNull($instance->getItems());
+        self::assertNotNull($instance->items);
+        $instance = $this->getTestInstance($value);
+        self::assertIsObject($instance->getItems());
+        self::assertIsObject($instance->items);
+        self::assertNotNull($instance->getItems());
+        self::assertNotNull($instance->items);
+        foreach ($value['items'] as $key => $element) {
+            if (is_array($element) && !empty($element)) {
+                self::assertEquals($element, $instance->getItems()[$key]->toArray());
+                self::assertEquals($element, $instance->items[$key]->toArray());
+                self::assertIsArray($instance->getItems()[$key]->toArray());
+                self::assertIsArray($instance->items[$key]->toArray());
+            }
+            if (is_object($element) && !empty($element)) {
+                self::assertEquals($element, $instance->getItems()->get($key));
+                self::assertIsObject($instance->getItems()->get($key));
+                self::assertIsObject($instance->items->get($key));
+                self::assertIsObject($instance->getItems());
+                self::assertIsObject($instance->items);
+            }
         }
+        self::assertCount(count($value['items']), $instance->getItems());
+        self::assertCount(count($value['items']), $instance->items);
     }
 
     /**
-     * @dataProvider validDataProvider
-     * @param array $options
+     * @return array[]
+     * @throws Exception
      */
-    public function testGetNextCursor($options)
+    public function validItemsDataProvider(): array
     {
-        $instance = new PaymentsResponse($options);
-        if (empty($options['next_cursor'])) {
-            self::assertNull($instance->getNextCursor());
-        } else {
-            self::assertEquals($options['next_cursor'], $instance->getNextCursor());
+        $instance = $this->getTestInstance();
+        return $this->getValidDataProviderByType($instance->getValidator()->getRulesByPropName('_items'));
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function validClassDataProvider(): array
+    {
+        $result = [];
+        for ($i = 0; $i < 4; $i++) {
+            $result[] = $this->getValidDataProviderByClass(new PaymentsResponse());
         }
-    }
-
-    /**
-     * @dataProvider validDataProvider
-     * @param array $options
-     */
-    public function testHasNext($options)
-    {
-        $instance = new PaymentsResponse($options);
-        if (empty($options['next_cursor'])) {
-            self::assertFalse($instance->hasNextCursor());
-        } else {
-            self::assertTrue($instance->hasNextCursor());
-        }
-    }
-
-    /**
-     * @dataProvider invalidDataProvider
-     * @param array $options
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidData($options)
-    {
-        new PaymentsResponse($options);
-    }
-
-    public function validDataProvider()
-    {
-        return array(
-            array(
-                array(
-                    'items' => array(),
-                ),
-            ),
-            array(
-                array(
-                    'items' => array(
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'description' => Random::str(20),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => false,
-                            'refundable' => false,
-                            'confirmation' => array(
-                                'type' => ConfirmationType::EXTERNAL,
-                            ),
-                        )
-                    ),
-                    'next_cursor' => uniqid(),
-                ),
-            ),
-            array(
-                array(
-                    'items' => array(
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => true,
-                            'refundable' => true,
-                            'confirmation' => array(
-                                'type' => ConfirmationType::EXTERNAL,
-                            ),
-                        ),
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'description' => Random::str(20),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => false,
-                            'refundable' => false,
-                            'recipient' => array(
-                                'account_id' => uniqid(),
-                                'gateway_id' => uniqid(),
-                            ),
-                            'reference_id' => uniqid(),
-                            'captured_at' => date(YOOKASSA_DATE),
-                            'charge' => array('value' => Random::int(1, 100000), 'currency' => CurrencyCode::RUB),
-                            'income' => array('value' => Random::int(1, 100000), 'currency' => CurrencyCode::USD),
-                            'refunded' => array('value' => Random::int(1, 100000), 'currency' => CurrencyCode::EUR),
-                            'metadata' => array('test_key' => 'test_value'),
-                            'cancellation_details' => array('party' => CancellationDetailsPartyCode::PAYMENT_NETWORK, 'reason' => CancellationDetailsReasonCode::INVALID_CSC),
-                            'authorization_details' => array('rrn' => Random::str(20), 'auth_code' => Random::str(20)),
-                            'refunded_amount' => array('value' => Random::int(1, 100000), 'currency' => CurrencyCode::RUB),
-                            'confirmation' => array(
-                                'type' => ConfirmationType::EXTERNAL,
-                            ),
-                            'receipt_registration' => ReceiptRegistrationStatus::PENDING,
-                        ),
-                    ),
-                    'next_cursor' => uniqid(),
-                ),
-            ),
-            array(
-                array(
-                    'items' => array(
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'description' => Random::str(20),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => true,
-                            'refundable' => true,
-                            'confirmation' => array(
-                                'type' => ConfirmationType::REDIRECT,
-                                'confirmation_url' => Random::str(10),
-                                'return_url' => Random::str(10),
-                                'enforce' => false,
-                            ),
-                            'income_amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => Random::value(CurrencyCode::getValidValues()),
-                            )
-                        ),
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'description' => Random::str(20),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => true,
-                            'refundable' => true,
-                            'confirmation' => array(
-                                'type' => ConfirmationType::REDIRECT,
-                                'confirmation_url' => Random::str(10),
-                            ),
-                            'income_amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => Random::value(CurrencyCode::getValidValues()),
-                            )
-                        ),
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'description' => Random::str(20),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => true,
-                            'refundable' => true,
-                            'confirmation' => array(
-                                'type' => ConfirmationType::CODE_VERIFICATION,
-                                'confirmation_url' => Random::str(10),
-                            ),
-                            'income_amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => Random::value(CurrencyCode::getValidValues()),
-                            )
-                        ),
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'description' => Random::str(20),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => true,
-                            'refundable' => true,
-                            'confirmation' => array(
-                                'type' => ConfirmationType::EMBEDDED,
-                                'confirmation_token' => Random::str(10),
-                                'confirmation_url' => Random::str(10),
-                            ),
-                            'income_amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => Random::value(CurrencyCode::getValidValues()),
-                            )
-                        ),
-                    ),
-                    'next_cursor' => uniqid(),
-                ),
-            ),
-        );
-    }
-
-    public function invalidDataProvider()
-    {
-        return array(
-            array(
-                array(
-                    'items' => array(
-                        array(
-                            'id' => Random::str(36),
-                            'status' => PaymentStatus::SUCCEEDED,
-                            'amount' => array(
-                                'value' => Random::int(1, 100000),
-                                'currency' => CurrencyCode::EUR,
-                            ),
-                            'description' => Random::str(20),
-                            'created_at' => date(YOOKASSA_DATE),
-                            'payment_method' => array(
-                                'type' => PaymentMethodType::QIWI,
-                            ),
-                            'paid' => true,
-                            'refundable' => true,
-                            'confirmation' => array(
-                                'confirmation_url' => Random::str(10),
-                            )
-                        )
-                    ),
-                ),
-            )
-        );
+        return $result;
     }
 }
